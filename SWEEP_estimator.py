@@ -8,7 +8,9 @@ import scripts.write_outputs as OUT
 
 def main(write = "YES"):
     # 1. Load BSDB
-    bsdb_df = GET.get_BSDB("geojson").bsdb_df
+    # If running for the first time or updating BSDB, use "API".
+    # If running on existing BSDB from previous run, use "geojson."
+    bsdb_df = GET.get_BSDB("api").bsdb_df
 
     # 2. Filter
     filt_bsdb = FILTER.filter_bsdb(
