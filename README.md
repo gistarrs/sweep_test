@@ -9,15 +9,13 @@ This project is designed to aggregate and analyze emissions data. It pulls data 
 - [Usage](#usage)
 - [Scripts Overview](#scripts-overview)
 - [Example](#example)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Installation
 
 1. Clone this repository to your local machine:
 
     ```bash
-    git clone https://github.com/yourusername/project-name.git
+    git clone https://github.com/gistarrs/sweep_test.git
     ```
 
 2. Navigate to the project directory:
