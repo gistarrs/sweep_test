@@ -9,7 +9,7 @@ SWEEP applies filters based on specific criteria (such as date ranges and geogra
 - [Requirements](#requirements)
 - [Usage](#usage)
 - [Scripts Overview](#scripts-overview)
-- [Example](#example)
+- [Sources](#sources)
 
 ## Installation
 
@@ -104,3 +104,24 @@ You can modify the parameters within config.py and SWEEP_estimator.py or call sp
 - write_outputs.py
 
     Handles the writing of outputs to disk, such as GeoPackages, CSV files, or other formats. The results include both spatial and non-spatial outputs.
+
+## Sources
+
+### Structure Information
+- **[CAL FIRE Damage Inspection Data (DINS)](https://data.ca.gov/dataset/cal-fire-damage-inspection-dins-data)**: CAL FIRE damage inspection data from structures impacted by wildland fire.
+- **[FEMA building footprint data](https://gis-fema.hub.arcgis.com/pages/usa-structures)**: Federal Emergency Management Agency (FEMA) building footprint database.
+- **[Microsoft Building footprints](https://github.com/Microsoft/USBuildingFootprints)**: Microsoft building footprints.
+
+### Emissions Estimation
+- **[Holder et al. 2023](https://doi.org/10.1093/pnasnexus/pgad186)**: Paper summarizing findings of recent research regarding emissions estimation from structures, including a comprehensive list of pollutant species and emissions factors, contents and frame factors, and estimated damage from fire.
+- **[CARB 1999](https://ww2.arb.ca.gov/carb-miscellaneous-process-methodologies-fires)**: California Air Resources Board (CARB) Structural and Automobile Fires document.
+
+### Fire Perimeter Data
+- **[CAL FIRE FRAP Historical Fire Perimeters](https://data.ca.gov/dataset/california-historical-fire-perimeters)**: CAL FIRE compilation of historical fire perimeters for California.
+- **[WFIG Fire Perimeters](https://data-nifc.opendata.arcgis.com/datasets/nifc::wfigs-current-interagency-fire-perimeters/about)**: Fire perimeters compiled across multiple agencies by the National Interagency Fire Center Wildland Fire Interagency Geospatial Services (WFIGS) Group.
+
+### Administrative Boundaries
+- **[CARB CoAbDis](https://ww2.arb.ca.gov/geographical-information-system-gis-library)** California Air Resources Board (CARB) county, air basin, and air pollution control district boundaries.
+
+
+
