@@ -111,6 +111,7 @@ You can modify the parameters within config.py and SWEEP_estimator.py or call sp
 - **[CAL FIRE Damage Inspection Data (DINS)](https://data.ca.gov/dataset/cal-fire-damage-inspection-dins-data)**: CAL FIRE damage inspection data from structures impacted by wildland fire.
 - **[FEMA building footprint data](https://gis-fema.hub.arcgis.com/pages/usa-structures)**: Federal Emergency Management Agency (FEMA) building footprint database.
 - **[Microsoft Building footprints](https://github.com/Microsoft/USBuildingFootprints)**: Microsoft building footprints.
+- **[Lightbox Parcel Data](https://www.lightboxre.com/data/lightbox-parcel-data/)**
 
 ### Emissions Estimation
 - **[Holder et al. 2023](https://doi.org/10.1093/pnasnexus/pgad186)**: Paper summarizing findings of recent research regarding emissions estimation from structures, including a comprehensive list of pollutant species and emissions factors, contents and frame factors, and estimated damage from fire.
