@@ -83,16 +83,23 @@ You can modify the parameters within config.py and SWEEP_estimator.py or call sp
 ### Scripts Overview:
 
 - config.py
-Contains configuration settings for the project, including any necessary API keys, file paths, or environment-specific settings.
+
+    Contains configuration settings for the project, including any necessary API keys, file paths, or environment-specific settings.
 - get_bsdb.py
-Handles the retrieval of BSDB (Base Spatial Data) from the API, loading it into a DataFrame for further processing.
+
+    Handles the retrieval of BSDB (Base Spatial Data) from the API, loading it into a DataFrame for further processing.
 - filters.py
-Applies various filters to the BSDB data, such as date range filtering, geographic filtering (e.g., by county), and other conditions.
+
+    Applies various filters to the BSDB data, such as date range filtering, geographic filtering (e.g., by county), and other conditions.
 - emissions.py
-Estimates emissions based on the filtered BSDB data using emission factors (EF) for various pollutants. The emission factors are selected based on the user's choice.
+
+    Estimates emissions based on the filtered BSDB data using emission factors (EF) for various pollutants. The emission factors are selected based on the user's choice.
 - aggregate.py
-Aggregates the emissions data according to specified columns (e.g., by county, district, or year), and generates a summarized report.
+
+    Aggregates the emissions data according to specified columns (e.g., by county, district, or year), and generates a summarized report.
 - vehicles.py
-Calculates vehicle-related emissions, using emission factors and ratios specific to vehicle types.
+
+    Calculates vehicle-related emissions, using emission factors and ratios specific to vehicle types.
 - write_outputs.py
-Handles the writing of outputs to disk, such as GeoPackages, CSV files, or other formats. The results include both spatial and non-spatial outputs.
+
+    Handles the writing of outputs to disk, such as GeoPackages, CSV files, or other formats. The results include both spatial and non-spatial outputs.
