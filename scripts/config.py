@@ -14,7 +14,7 @@ data_dir = os.path.join(package_root, "data")
 ef_folder = os.path.join(data_dir, "emissions_factors")
 
 # Default folder outputs will be written to.
-out_dir = r"C:\Users\gstarrs\Projects\CARB\SWEEP\SWEEP_package\outputs"
+out_dir = os.path.join(package_root, "outputs")
 
 # AGOL credentials for weblayer update.
 # username = "gstarrs_ucanr"
