@@ -20,7 +20,6 @@ out_dir = os.path.join(package_root, "outputs")
 working_gdb = r"C:\Users\gstarrs\Projects\CARB\SWEEP\SWEEP_Project.gdb"
 # parcel_gdb = r"C:\Users\gstarrs\Projects\CARB\SWEEP\inputs\PAPCEL_DATA_Q4_NOPII.gdb"
 
-
 # URLs for layers used in API queries.
 bsdb_url = "https://services.arcgis.com/0xnwbwUttaTjns4i/arcgis/rest/services/BSDB/FeatureServer/0/query"
 
