@@ -3,3 +3,4 @@ geopandas>=1.0.1
 numpy>=1.21.0
 requests>=2.25.0
 pyogrio>=0.4.0
+openpyxl
