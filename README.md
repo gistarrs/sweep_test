@@ -1,7 +1,8 @@
 # SWEEP: Structure Wildfire Emissions Estimator and Predictor
 
 ## Description
-This project is designed to aggregate and analyze emissions data. It pulls data from various sources, applies filters based on specific criteria (such as date ranges and geographic areas), estimates emissions, and generates aggregated reports on the results. The project utilizes a series of Python scripts, each of which handles a different part of the pipeline (e.g., data retrieval, emissions estimation, aggregation, etc.).
+SWEEP is designed to estimate emissions from structures damaged or destoryed by wildfire in California.
+SWEEP applies filters based on specific criteria (such as date ranges and geographic areas), estimates emissions, and generates aggregated reports on the results. The project utilizes a series of Python scripts, each of which handles a different part of the pipeline (e.g., data retrieval, emissions estimation, aggregation, etc.).
 
 ## Table of Contents
 - [Installation](#installation)
