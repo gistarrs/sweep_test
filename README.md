@@ -21,7 +21,7 @@ This project is designed to aggregate and analyze emissions data. It pulls data 
 2. Navigate to the project directory:
 
     ```bash
-    cd project-name
+    cd sweep_test
     ```
 
 3. Create a virtual environment:
