@@ -8,6 +8,28 @@ import scripts.config as config
 import requests
 
 class get_BSDB:
+    """
+    The `get_BSDB` class is used to retrieve the BSDB (Building Structure Damage Base) data from different sources:
+    a file Geodatabase (GDB), an API, or a GeoJSON file. The class automatically loads the BSDB data into a GeoDataFrame 
+    and processes any relevant date columns.
+
+    Parameters:
+    - `source` (str): The data source for retrieving the BSDB data. 
+      Can be one of the following:
+        - "API" (API): Fetches data from an API and saves it as a GeoJSON file. For use on first run, and periodic updates.
+        - "GEOJSON" (GeoJSON): Loads BSDB data from an existing GeoJSON file. Previous API return is saved and will be called if this is chosen.
+        - "GDB" (Geodatabase): Loads data from a file Geodatabase (user must already have a local GDB with a BSDB).
+    
+    Notes
+    -----
+    - source parameter is not case sensisitive.
+    
+    Example
+    -----
+    >>> bsdb_api = get_BSDB("API") 
+    >>> bsdb_gjn = get_BSDB("geojson") 
+    """
+        
     def __init__(self, source):
         #self.bsdb_source = config.bsdb_source
         self.bsdb_source = source.upper()
