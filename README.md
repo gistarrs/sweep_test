@@ -51,9 +51,8 @@ Ensure the following libraries are installed:
 - pandas
 - geopandas
 - numpy
-- shapely
 - requests
-- etc. (list any additional dependencies you use)
+- pyogrio
 
 You can install these dependencies by running:
 
@@ -63,14 +62,14 @@ pip install -r requirements.txt
 
 ## Usage
 
-### Running the Pipeline
+### Running the Estimator
 
 To execute the full pipeline, run the `SWEEP_estimator.py` script. This will execute the sequence of functions to retrieve data, apply filters, estimate emissions, aggregate the results, and write the outputs.
 
-### Command to run the pipeline:
+### Command to run the estimator:
 
 ```bash
-python run_pipeline.py
+python SWEEP_estimator.py
 ```
 You can modify the parameters within config.py and SWEEP_estimator.py or call specific functions as needed.
 
