@@ -16,14 +16,6 @@ ef_folder = os.path.join(data_dir, "emissions_factors")
 # Default folder outputs will be written to.
 out_dir = os.path.join(package_root, "outputs")
 
-# AGOL credentials for weblayer update.
-# username = "gstarrs_ucanr"
-# password = "!V1adimir!arc"
-
-# Most recent date for DINS API query, back_months will work back from here to set start of date range for query.
-current_date = "Today"
-back_months = 24
-
 # File paths
 working_gdb = r"C:\Users\gstarrs\Projects\CARB\SWEEP\SWEEP_Project.gdb"
 # parcel_gdb = r"C:\Users\gstarrs\Projects\CARB\SWEEP\inputs\PAPCEL_DATA_Q4_NOPII.gdb"
