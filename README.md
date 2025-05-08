@@ -1,11 +1,3 @@
-from setuptools import setup, find_packages
-
-setup(
-    name="sweep_estimator",
-    version="0.1",
-    packages=find_packages(include=["scripts", "scripts.*"]),
-)
-
 # SWEEP: Structure Wildfire Emissions Estimator and Predictor
 
 ## Description
