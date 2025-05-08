@@ -66,7 +66,7 @@ pip install -r requirements.txt
 ### Running the Estimator
 
 To execute the full pipeline, run the `SWEEP_estimator.py` script. This will execute the sequence of functions to retrieve data, apply filters, estimate emissions, aggregate the results, and write the outputs.
-
+For the first run, unsure hte bsdb_source is set to 'aAPI'-- this will write locally to geojson, but updating the bsdb via API periodically is recommended.
 ### Command to run the estimator:
 
 ```bash
