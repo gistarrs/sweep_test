@@ -77,7 +77,7 @@ You can modify the parameters within config.py and SWEEP_estimator.py or call sp
 
 ### Example Outputs:
 
-- Spatial file: Geopackage(gpkg), shapefile (.shp), or geojson containing point emissions data.
+- Spatial file: Geopackage (gpkg), shapefile (.shp), or geojson containing point emissions data.
 - Emissions report: .xlsx of per-structure emissions data.
 - Aggregated report: .xlsx of aggregated emissions data.
 - Vehicle report: .xslx of estimated emissions from vehicles consumed by fire.
@@ -111,7 +111,7 @@ You can modify the parameters within config.py and SWEEP_estimator.py or call sp
 ### Structure Information
 - **[CAL FIRE Damage Inspection Data (DINS)](https://data.ca.gov/dataset/cal-fire-damage-inspection-dins-data)**: CAL FIRE damage inspection data from structures impacted by wildland fire.
 - **[FEMA building footprint data](https://gis-fema.hub.arcgis.com/pages/usa-structures)**: Federal Emergency Management Agency (FEMA) building footprint database.
-- **[Microsoft Building footprints](https://github.com/Microsoft/USBuildingFootprints)**: Microsoft building footprints.
+- **[Microsoft Building footprints](https://github.com/Microsoft/USBuildingFootprints)**: Microsoft building footprints' public data release.
 - **[Lightbox Parcel Data](https://www.lightboxre.com/data/lightbox-parcel-data/)**
 
 ### Emissions Estimation
@@ -123,7 +123,7 @@ You can modify the parameters within config.py and SWEEP_estimator.py or call sp
 - **[WFIG Fire Perimeters](https://data-nifc.opendata.arcgis.com/datasets/nifc::wfigs-current-interagency-fire-perimeters/about)**: Fire perimeters compiled across multiple agencies by the National Interagency Fire Center Wildland Fire Interagency Geospatial Services (WFIGS) Group.
 
 ### Administrative Boundaries
-- **[CARB CoAbDis](https://ww2.arb.ca.gov/geographical-information-system-gis-library)** California Air Resources Board (CARB) county, air basin, and air pollution control district boundaries.
+- **[CARB CoAbDis](https://ww2.arb.ca.gov/geographical-information-system-gis-library)**: California Air Resources Board (CARB) county, air basin, and air pollution control district boundaries.
 
 
 
