@@ -54,6 +54,7 @@ Ensure the following libraries are installed:
 - numpy
 - requests
 - pyogrio
+- -openpyxl
 
 You can install these dependencies by running:
 
