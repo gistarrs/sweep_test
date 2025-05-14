@@ -73,9 +73,19 @@ For the first run, make sure the bsdb_source is set to 'API' to acquire the data
 ```bash
 python SWEEP_estimator.py
 ```
-You can modify the parameters within config.py and SWEEP_estimator.py or call specific functions as needed.
 
-### Example Outputs:
+### Running the Predictor
+
+To execute the full pipeline, run the `SWEEP_predictor.py` script, providing the path to a "Area of Interest" file. This will execute the sequence of functions to retrieve data, apply filters, estimate emissions, aggregate the results, and write the outputs.
+
+### Command to run the predictor:
+
+```bash
+python SWEEP_predictor.py
+```
+You can modify the parameters within config.py, SWEEP_estimator.py, and SWEEP_predictor.py or call specific functions as needed.
+
+### Example Outputs (both Estimator and Predictor):
 
 - Spatial file: Geopackage (gpkg), shapefile (.shp), or geojson containing point emissions data.
 - Emissions report: .xlsx of per-structure emissions data.
