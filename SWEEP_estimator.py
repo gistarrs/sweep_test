@@ -67,7 +67,7 @@ def main(write = "NO"):
     vehicle_table = VEH.vehicle_calculator(
         emissions_gdf,
         count_or_ratio="RATIO",  # Use ratio-based method for vehicle calc
-        cr_value=1.44,           # Ratio of people per vehicle
+        cr_value=1.44,           # Ratio of vehicles to structures
         vef_choice="CARB",       # Vehicle emission factors source
         vpollutants="ALL"        # Calculate for all pollutants
     )
