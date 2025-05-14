@@ -208,7 +208,15 @@ def estimate_emissions(
         'COUNTY', 'AIR_BASIN', 'AIR_DISTRICT', 'COABDIS', 'CONSUMPTION_FACTOR',
         'FRAME_FACTOR', 'CONTENTS_FACTOR', 'geometry'
     ]
+    aoi_cols = [col for col in structure_df.columns if col.endswith('_AOI')]
 
+    if aoi_cols:
+        out_cols = aoi_cols + out_cols
+        
+        # Add 'AOI_INDEX' only if it's present in the columns
+        if "AOI_INDEX" in structure_df.columns:
+            out_cols.append("AOI_INDEX")
+        
     selected_out_cols = [col for col in out_cols if col in structure_df.columns] + tn_columns
     emissions_gdf = structure_df[selected_out_cols]
     
