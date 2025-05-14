@@ -90,6 +90,10 @@ You can modify the parameters within config.py and SWEEP_estimator.py or call sp
 - get_bsdb.py
 
     Handles the retrieval of BSDB (Base Spatial Data) from the API, loading it into a DataFrame for further processing.
+
+- aoi_handler.py
+
+    Provides classes and methods to extract and process parcel data  intersecting a user-defined Area of Interest (AOI). Generates a synthetic BSDB used by the predictor.
 - filters.py
 
     Applies various filters to the BSDB data, such as date range filtering, geographic filtering (e.g., by county), and other conditions.
