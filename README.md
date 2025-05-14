@@ -76,6 +76,8 @@ python SWEEP_estimator.py
 
 ### Running the Predictor
 
+# __NOTE:__ PREDICTOR WILL NOT CURRENTLY WORK WITHOUT AN EXISTING LOCAL PARCEL DATASET. 
+
 To execute the full pipeline, run the `SWEEP_predictor.py` script, providing the path to a "Area of Interest" file. This will execute the sequence of functions to retrieve data, apply filters, estimate emissions, aggregate the results, and write the outputs.
 
 ### Command to run the predictor:
