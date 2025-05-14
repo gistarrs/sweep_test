@@ -11,22 +11,6 @@ from shapely.geometry import Point
 
 from scripts import config
 
-# bsdb_df = GET.get_BSDB("geojson").bsdb_df
-# bsdb_cols = list(bsdb_df.columns)
-
-# aoi_path = r"C:\Users\gstarrs\Projects\CARB\SWEEP\sweep_test\data\fire_demo.shp"
-# aoi_handler = AOIParcels(aoi_path)
-# aoi_parcels, aoi_points = aoi_handler.aoi_parcels_from_bbox()
-# processor = AOIProcessor()
-# aoi_bsdb = processor.run_all(aoi_points)
-
-
-# emissions_gdf = EE.estimate_emissions(
-#     aoi_bsdb,
-#     ef_choice="HOLDER",
-#     pollutants=["CO", "NOx", "PO"]
-# )
-
 class AOIParcels:
     """
     A class to extract parcels that intersect with a user-submitted Area of Interest (AOI).
