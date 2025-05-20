@@ -12,6 +12,7 @@ project = {
 # Default SWEEP settings
 # ------------------------
 
+agol_portal = "https://ucanr.maps.arcgis.com"
 agol_oauth = "U4aVA527VsrHv4er"
 bsdb_source = "geojson"  # options: "gdb", "api", "geojson"
 
