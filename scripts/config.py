@@ -11,6 +11,8 @@ project = {
 # ------------------------
 # Default SWEEP settings
 # ------------------------
+
+agol_oauth = "U4aVA527VsrHv4er"
 bsdb_source = "geojson"  # options: "gdb", "api", "geojson"
 
 ef_default = "HOLDER"
