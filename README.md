@@ -203,7 +203,7 @@ Key Parameters:
 ["YEAR", "MONTH", "INCIDENT", "COABDIS", "COUNTY", "AIR DISTRICT", "AIR DISTRICT ID", "AIR BASIN"]. Defaults to ['YEAR', 'INCIDENT']
 
 ```bash
-emissions_gdf_auto, agg_table_auto, vehicle_table_auto = main(
+emissions_gdf, agg_table, vehicle_table = main(
     get_mode = "use_default",
     filter_method = "automated",
     filter_field = "Air Basin",
