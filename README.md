@@ -83,7 +83,7 @@ from SWEEP_estimator import main
 
 ### General Parameters
 
-#### Getting BSDB Data
+#### Getting BSDB Data and Writing Outputs
 Regardless of the query type, users will need to specify get_mode in all queries.
 - get_mode: Literal["refresh", "use_default", "use_custom"] = "use_default".
 
@@ -92,8 +92,6 @@ Regardless of the query type, users will need to specify get_mode in all queries
       - "use_custom": loads a file specified by custom_filename.
   
 - custom_filename: str. If get_mode = "refresh", writes BSDB from API query to custom_filename in bsdb_dataset folder. If get_mode = "use_custom", reads from custom_filename in bsdb_dataset folder.
-
-#### Handling outputs
 - write: Literal["YES", "NO"] = "YES".  "Yes" to saves outputs to disk in the outputs folder, or "NO" doesn't write.
 
 #### Emissions Estimation Parameters
