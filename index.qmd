@@ -1,5 +1,5 @@
 ---
-title: "SWEEP Estimator Demo"
+title: "SWEEP Demo"
 format:
   html:
     toc: true
@@ -16,7 +16,7 @@ import matplotlib.cm as cm
 import matplotlib.colors as colors
 
 from sweep import config
-from SWEEP_estimator import main
+from SWEEP_estimator import main as sweep_estimator
 print("Imports complete!")
 ```
 
@@ -37,7 +37,7 @@ The Estimator uses data from CAL FIRE's damage inspection database to identify s
 It uses parcel and footprint data to esitmate the square footage for each structure.
 
 ```{python}
-emissions_gdf, agg_table, vehicle_table = main(
+emissions_gdf, agg_table, vehicle_table = sweep_estimator(
     get_mode = "use_default",
     filter_method = "Spatial",
     polygon_input = aoi,
@@ -55,29 +55,21 @@ print(emissions_gdf.crs)
 emissions_gdf.head(5)
 ```
 
-
 As a geodataframe, the output is easily visualized using the geopandas and matplotlib libraries.
 ```{python}
-# Read AOI layer
+
 aoi = gpd.read_file(aoi_path)
 aoi_gdf = aoi.to_crs(emissions_gdf.crs)
-
-# Create plot
-fig, ax = plt.subplots(figsize=(10, 10))
-
-# Plot AOI in light gray
+fig, ax = plt.subplots(figsize=(6, 8))
 aoi_gdf.plot(ax=ax, color='none', edgecolor='lightgray', linewidth=1)
-
-# Compute marker sizes based on E_CO_TN (adjust scaling factor as needed)
 sizes = emissions_gdf["E_CO_TN"].fillna(0) * 5
-
-# Plot predicted emissions with symbol size proportional to E_CO_TN
 emissions_gdf.plot(
     ax=ax,
     color='orange',
     alpha=0.6,
     markersize=sizes
 )
+ax.set_title("Emissions Map (CO in Tons)", fontsize=14)
 ```
 
 In this demo run, we provided "AIR DISTRICT" and "AOI_INDEX" as the aggregation fields.
@@ -124,4 +116,82 @@ emissions_gdf_auto.head()
 As specified in "aggregate_fields", the aggregate table is summarized by year, air district, and fire incident.
 ```{python}
 agg_table_auto
+```
+
+# Emissions Predictor
+
+```{python}
+from sweep import config
+from SWEEP_predictor import main as sweep_predictor
+
+from dotenv import load_dotenv
+load_dotenv() 
+```
+
+The AOI is the polygon shape or shapes in which emissions will be estimated. 
+In the Predictor function, this is aoi_source, and it can be either a geopandas geodataframe,
+or a path to a geopackage or shapefile.
+
+The aoi_source will have each row or feature indexed seperately, with all columns retained in the final products.
+```{python}
+# Recycling! We'll use the same aoi as the spatial query above.
+
+aoi.plot()
+```
+
+Key differences related to the predictor are:
+- aoi_source: a geodataframe or shapeflie/geopackage path is required.
+- api_key: the need for a LightBox API key
+- ratio_destroyed: users must specify the ratio of structures to designate "destroyed" by fire.
+
+```{python}
+predicted_emissions_gdf, agg_table, vehicle_table = sweep_predictor(
+    aoi_source = aoi,
+    # You need a lightbox API key to get the parcel data.
+    api_key = os.getenv('LB_API_KEY'),
+    ratio_destroyed = 0.8,
+    pollutants = None, 
+    aggregate_fields = ['AIR DISTRICT', 'AOI_INDEX'],
+    write = "No")
+```
+
+
+In the returned dataframes, columns from the aoi_source are retained and tagged with "AOI" at the start of the column.
+predicted_emissions_gdf is a geodataframe of each record used to estimate emissions.
+Each "structure" is derived from the parcels that fell within the AOI.
+```{python}
+print(predicted_emissions_gdf.crs)
+predicted_emissions_gdf.head()
+```
+
+```{python}
+# Read AOI layer
+aoi_gdf = aoi.to_crs(predicted_emissions_gdf.crs)
+fig, ax = plt.subplots(figsize=(6, 8))
+aoi_gdf.plot(ax=ax, color='none', edgecolor='lightgray', linewidth=1)
+sizes = predicted_emissions_gdf["E_CO_TN"].fillna(0) * 5
+predicted_emissions_gdf.plot(
+    ax=ax,
+    color='orange',
+    alpha=0.6,
+    markersize=sizes
+)
+ax.set_title("Emissions Map (CO in Tons)", fontsize=14)
+```
+
+
+In this demo run, we provided "AIR DISTRICT" and "AOI_INDEX" as the aggregation fields.
+As you can see our results are split by AOI_INDEX (the polygon) and AIR_DISTRICT.
+We get total emissions for each polygon in each air district.
+
+```{python}
+agg_table
+```
+
+We can again add the full AOI information back in to each AOI polygon based on the index.
+```{python}
+aoi_cols = [col for col in predicted_emissions_gdf.columns if col.startswith("AOI_")]
+unique_aoi = predicted_emissions_gdf[aoi_cols].drop_duplicates()
+agg_table_aoi = agg_table.merge(unique_aoi, on="AOI_INDEX", how="left")
+agg_table_aoi
 ```

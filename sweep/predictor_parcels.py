@@ -466,7 +466,7 @@ class AOIProcessor:
             "CO_NAME": "COUNTY"
         })
 
-        print(aoi_coab.columns)
+        #print(aoi_coab.columns)
         return aoi_coab
 
     def _clean_columns(self, aoi_points):
@@ -507,7 +507,7 @@ class AOIProcessor:
         aoi_points['SQFT'] = aoi_points['LIVING_SQFT']
         aoi_points['SQFT_SOURCE'] = 'PARCEL'
 
-        print("Before drop", list(aoi_points.columns))
+        #print("Before drop", list(aoi_points.columns))
         # Filter to important fields
         keep_fields = [
             'OBJECTID', 'DAMAGE', 'STREETNUMBER', 'STREETNAME', 'STREETTYPE', 'STREETSUFFIX', 'CITY', 'STATE', 

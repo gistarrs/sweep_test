@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>SWEEP Estimator Demo</title>
+<title>Spatial Query – SWEEP Estimator Demo</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -57,22 +57,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -102,22 +102,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
 
-
-
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
-
 
 
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">SWEEP Estimator Demo</span>
     </a>
   </div>
@@ -128,7 +125,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./SWEEP_estimator_vignette.html" aria-current="page"> 
+    <a class="nav-link" href="../SWEEP_estimator_vignette.html"> 
 <span class="menu-text">Demo</span></a>
   </li>  
 </ul>
@@ -142,26 +139,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#load-dependencies" id="toc-load-dependencies" class="nav-link active" data-scroll-target="#load-dependencies">Load dependencies</a></li>
-  <li><a href="#emissions-estimator" id="toc-emissions-estimator" class="nav-link" data-scroll-target="#emissions-estimator">Emissions Estimator</a>
-  <ul class="collapse">
-  <li><a href="#spatial-emissions-estimation-query" id="toc-spatial-emissions-estimation-query" class="nav-link" data-scroll-target="#spatial-emissions-estimation-query">Spatial Emissions Estimation Query</a></li>
-  <li><a href="#automated-emissions-estimation-query" id="toc-automated-emissions-estimation-query" class="nav-link" data-scroll-target="#automated-emissions-estimation-query">Automated Emissions Estimation Query</a></li>
-  </ul></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">SWEEP Estimator Demo</h1>
+<h1 class="title">Spatial Query</h1>
 </div>
 
 
@@ -178,63 +162,67 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="load-dependencies" class="level1">
-<h1>Load dependencies</h1>
-<div id="65abd920" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> SWEEP_estimator <span class="im">import</span> main</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.cm <span class="im">as</span> cm</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.colors <span class="im">as</span> colors</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sweep <span class="im">import</span> config</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> SWEEP_estimator <span class="im">import</span> main</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Imports complete!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-1" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimator</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-2" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#1. Load dependencies</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.cm <span class="im">as</span> cm</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.colors <span class="im">as</span> colors</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sweep <span class="im">import</span> config</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> SWEEP_estimator <span class="im">import</span> main</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Imports complete!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Imports complete!</code></pre>
+<pre><code>Imports complete!
+Imports complete!</code></pre>
 </div>
 </div>
-</section>
-<section id="emissions-estimator" class="level1">
-<h1>Emissions Estimator</h1>
-<p>The Estimator uses data from CAL FIRE’s damage inspection database to identify structures damaged by wildfire. It uses parcel and footprint data to esitmate the square footage for each structure.</p>
-<section id="spatial-emissions-estimation-query" class="level2">
-<h2 class="anchored" data-anchor-id="spatial-emissions-estimation-query">Spatial Emissions Estimation Query</h2>
-<p>Read in an AOI (optional: take a look!)</p>
-<div id="fd473e76" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>aoi_path <span class="op">=</span> os.path.join(config.demo_dir, <span class="st">"demo_multipoly.shp"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>aoi <span class="op">=</span> gpd.read_file(aoi_path)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>aoi.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-4" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>aoi_path <span class="op">=</span> os.path.join(config.demo_dir, <span class="st">"demo_multipoly.shp"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>aoi <span class="op">=</span> gpd.read_file(aoi_path)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>aoi.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="SWEEP_estimator_vignette_files/figure-html/cell-3-output-1.png" width="547" height="411" class="figure-img"></p>
+<p><img src="Estimator_Demo_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The Estimator uses data from CAL FIRE’s damage inspection database to identify structures damaged by wildfire. It uses parcel and footprint data to esitmate the square footage for each structure.</p>
-<div id="0d29af2b" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>emissions_gdf, agg_table, vehicle_table <span class="op">=</span> main(</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    get_mode <span class="op">=</span> <span class="st">"use_default"</span>,</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    filter_method <span class="op">=</span> <span class="st">"Spatial"</span>,</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    polygon_input <span class="op">=</span> aoi,</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    aggregate_fields<span class="op">=</span>[<span class="st">'AIR DISTRICT'</span>, <span class="st">'AOI_INDEX'</span>]</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Complete!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-6" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter spatiallly-- we use two polygon geometries to pull data for known incidents.</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># However, SWEEP doesn't automatically know if there are other fires in the region-- using a date filter is advised.</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>emissions_gdf, agg_table, vehicle_table <span class="op">=</span> main(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    get_mode <span class="op">=</span> <span class="st">"use_default"</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    filter_method <span class="op">=</span> <span class="st">"Spatial"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    polygon_input <span class="op">=</span> aoi,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    aggregate_fields<span class="op">=</span>[<span class="st">'AIR DISTRICT'</span>, <span class="st">'AOI_INDEX'</span>]</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Complete!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Loading BSDB using use_default...
+Loading BSDB using use_default...
 Applying filter criteria...
 No date filter applied.
 Reprojecting polygon from EPSG:4326 to EPSG:3310.
-451 rows after spatial filtering with   fire_name    incident_n start_date                          group_id  \
-0  Mosquito  CATNF 001371 2022-09-06  Mosquito_CATNF 001371_2022-09-06   
-1     River  CANEU 020628 2021-08-04     River_CANEU 020628_2021-08-04   
-
-  fp_source                                           geometry  
-0      FRAP  MULTIPOLYGON (((-120.56853 38.98437, -120.5686...  
-1      FRAP  POLYGON ((-120.99035 39.0844, -120.99116 39.08...  .
+451 rows after spatial filtering with   fire_name    incident_n start_date                          group_id fp_source                                           geometry
+0  Mosquito  CATNF 001371 2022-09-06  Mosquito_CATNF 001371_2022-09-06      FRAP  MULTIPOLYGON (((-120.56853 38.98437, -120.5686...
+1     River  CANEU 020628 2021-08-04     River_CANEU 020628_2021-08-04      FRAP  POLYGON ((-120.99035 39.0844, -120.99116 39.08....
+Estimating emissions for pollutants: ['CO', 'NOx', 'SOx', 'PM', 'TOG']...
+C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors
+Holder efs from: C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors\Holder_EFs.xlsx
+Requested pollutants: ['CO', 'NOx', 'SOx', 'PM', 'TOG']
+Applying filter criteria...
+No date filter applied.
+Reprojecting polygon from EPSG:4326 to EPSG:3310.
+451 rows after spatial filtering with   fire_name    incident_n start_date                          group_id fp_source                                           geometry
+0  Mosquito  CATNF 001371 2022-09-06  Mosquito_CATNF 001371_2022-09-06      FRAP  MULTIPOLYGON (((-120.56853 38.98437, -120.5686...
+1     River  CANEU 020628 2021-08-04     River_CANEU 020628_2021-08-04      FRAP  POLYGON ((-120.99035 39.0844, -120.99116 39.08....
 Estimating emissions for pollutants: ['CO', 'NOx', 'SOx', 'PM', 'TOG']...
 C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors
 Holder efs from: C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors\Holder_EFs.xlsx
@@ -248,21 +236,38 @@ Ratio provided: 311.03999999999996 vehicles estimated using ratio: 1.44
 CARB efs from: C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors\CARB_EFs.xlsx
 Requested pollutants: ['CO', 'NOx', 'SOx', 'PM']
 Returned pollutants: ['CO' 'NOx' 'SOx' 'PM']
-Writing Emissions Report to C:\Users\gstarrs\Projects\CARB\sweep_test\outputs\SWEEP_20250610_160518\Emissions_Report.xlsx
-Writing Aggregated Report to C:\Users\gstarrs\Projects\CARB\sweep_test\outputs\SWEEP_20250610_160518\Aggregated_Report.xlsx
-Writing Vehicle Report to C:\Users\gstarrs\Projects\CARB\sweep_test\outputs\SWEEP_20250610_160518\Vehicle_Report.xlsx
-Spatial data written to C:\Users\gstarrs\Projects\CARB\sweep_test\outputs\SWEEP_20250610_160518\Emissions_Spatial.gpkg
-Complete!</code></pre>
+Writing Emissions Report to C:\Users\gstarrs\Projects\CARB\sweep_test\outputs\SWEEP_20250610_133523\Emissions_Report.xlsx
+Writing Aggregated Report to C:\Users\gstarrs\Projects\CARB\sweep_test\outputs\SWEEP_20250610_133523\Aggregated_Report.xlsx
+Writing Vehicle Report to C:\Users\gstarrs\Projects\CARB\sweep_test\outputs\SWEEP_20250610_133523\Vehicle_Report.xlsx
+Returned pollutants: ['CO' 'NOx' 'SOx' 'PM' 'TOG']
+Aggregating report by: ['AIR DISTRICT', 'AOI_INDEX']...
+Aggregating on: ['AIR DISTRICT', 'AOI_INDEX']
+Calculating vehicle emissions with CARB factors...
+216
+Ratio provided: 311.03999999999996 vehicles estimated using ratio: 1.44
+CARB efs from: C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors\CARB_EFs.xlsx
+Requested pollutants: ['CO', 'NOx', 'SOx', 'PM']
+Returned pollutants: ['CO' 'NOx' 'SOx' 'PM']
+Writing Emissions Report to C:\Users\gstarrs\Projects\CARB\sweep_test\outputs\SWEEP_20250610_133523\Emissions_Report.xlsx
+Writing Aggregated Report to C:\Users\gstarrs\Projects\CARB\sweep_test\outputs\SWEEP_20250610_133523\Aggregated_Report.xlsx
+Writing Vehicle Report to C:\Users\gstarrs\Projects\CARB\sweep_test\outputs\SWEEP_20250610_133523\Vehicle_Report.xlsx
+Spatial data written to C:\Users\gstarrs\Projects\CARB\sweep_test\outputs\SWEEP_20250610_133523\Emissions_Spatial.gpkg
+running...
+Spatial data written to C:\Users\gstarrs\Projects\CARB\sweep_test\outputs\SWEEP_20250610_133523\Emissions_Spatial.gpkg
+running...</code></pre>
 </div>
 </div>
-<p>In the returned dataframes, columns from the aoi_source are retained and tagged with “AOI” at the start of the column. emissions_gdf is a geodataframe of each structure and their estimated emissions, along with parameters used in the estimation processl</p>
-<div id="9485531a" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(emissions_gdf.crs)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>emissions_gdf.head(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-7" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In the returned dataframes, columns from the aoi_source are retained and tagged with "AOI" at the start of the column.</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># predicted_emissions_gdf is a geodataframe of each record used to estimate emissions.</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># These are parcels that fell within the AOI and were populated with data for living squarefootage.</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(emissions_gdf.crs)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>emissions_gdf.head(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>EPSG:3310</code></pre>
+<pre><code>EPSG:3310
+EPSG:3310</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="13">
+<div class="cell-output cell-output-display">
 <div>
 
 
@@ -280,7 +285,17 @@ Complete!</code></pre>
 <th data-quarto-table-cell-role="th">INCIDENTNUM</th>
 <th data-quarto-table-cell-role="th">START_DATE</th>
 <th data-quarto-table-cell-role="th">GLOBALID_DINS</th>
-<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">DAMAGE</th>
+<th data-quarto-table-cell-role="th">STRUCTURETYPE</th>
+<th data-quarto-table-cell-role="th">STRUCTURECATEGORY</th>
+<th data-quarto-table-cell-role="th">CAT</th>
+<th data-quarto-table-cell-role="th">SQFT</th>
+<th data-quarto-table-cell-role="th">SQFT_SOURCE</th>
+<th data-quarto-table-cell-role="th">COUNTY</th>
+<th data-quarto-table-cell-role="th">AIR_BASIN</th>
+<th data-quarto-table-cell-role="th">AIR_DISTRICT</th>
+<th data-quarto-table-cell-role="th">COABDIS</th>
+<th data-quarto-table-cell-role="th">CONSUMPTION_FACTOR</th>
 <th data-quarto-table-cell-role="th">FRAME_FACTOR</th>
 <th data-quarto-table-cell-role="th">CONTENTS_FACTOR</th>
 <th data-quarto-table-cell-role="th">geometry</th>
@@ -306,7 +321,17 @@ Complete!</code></pre>
 <td>CANEU 020628</td>
 <td>2021-08-04</td>
 <td>{5A6B63E7-0584-4A3D-9566-D1BED0D23610}</td>
-<td>...</td>
+<td>Destroyed (&gt;50%)</td>
+<td>Single Family Residence Single Story</td>
+<td>Single Residence</td>
+<td>SFSS</td>
+<td>1458.0</td>
+<td>MEDIAN</td>
+<td>Placer</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>Placer</td>
+<td>31_MC_PLA</td>
+<td>0.95</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-84115.053 121871.211)</td>
@@ -330,7 +355,17 @@ Complete!</code></pre>
 <td>CANEU 020628</td>
 <td>2021-08-04</td>
 <td>{28A405D3-B735-4C6A-9030-5DB781554E63}</td>
-<td>...</td>
+<td>Destroyed (&gt;50%)</td>
+<td>Single Family Residence Single Story</td>
+<td>Single Residence</td>
+<td>SFSS</td>
+<td>1458.0</td>
+<td>MEDIAN</td>
+<td>Placer</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>Placer</td>
+<td>31_MC_PLA</td>
+<td>0.95</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-84075.412 121847.802)</td>
@@ -354,7 +389,17 @@ Complete!</code></pre>
 <td>CANEU 020628</td>
 <td>2021-08-04</td>
 <td>{A8436F57-068C-4D19-B659-48B51EE6DCA0}</td>
-<td>...</td>
+<td>Destroyed (&gt;50%)</td>
+<td>Single Family Residence Single Story</td>
+<td>Single Residence</td>
+<td>SFSS</td>
+<td>1458.0</td>
+<td>MEDIAN</td>
+<td>Placer</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>Placer</td>
+<td>31_MC_PLA</td>
+<td>0.95</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-84093.56 121769.283)</td>
@@ -378,7 +423,17 @@ Complete!</code></pre>
 <td>CANEU 020628</td>
 <td>2021-08-04</td>
 <td>{18869BDE-69CE-4F93-B844-2F9C416A57CD}</td>
-<td>...</td>
+<td>No Damage</td>
+<td>Single Family Residence Single Story</td>
+<td>Single Residence</td>
+<td>SFSS</td>
+<td>2411.0</td>
+<td>PARCEL</td>
+<td>Placer</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>Placer</td>
+<td>31_MC_PLA</td>
+<td>0.00</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-84135.956 121591.938)</td>
@@ -402,7 +457,17 @@ Complete!</code></pre>
 <td>CANEU 020628</td>
 <td>2021-08-04</td>
 <td>{84EC24BE-B097-4FB8-8287-406BB9929E4F}</td>
-<td>...</td>
+<td>Destroyed (&gt;50%)</td>
+<td>Single Family Residence Single Story</td>
+<td>Single Residence</td>
+<td>SFSS</td>
+<td>1458.0</td>
+<td>MEDIAN</td>
+<td>Placer</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>Placer</td>
+<td>31_MC_PLA</td>
+<td>0.95</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-83735.224 122402.04)</td>
@@ -417,44 +482,45 @@ Complete!</code></pre>
 </tbody>
 </table>
 
-<p>5 rows × 31 columns</p>
 </div>
 </div>
 </div>
-<p>As a geodataframe, the output is easily visualized using the geopandas and matplotlib libraries.</p>
-<div id="b3e73606" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read AOI layer</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>aoi <span class="op">=</span> gpd.read_file(aoi_path)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>aoi_gdf <span class="op">=</span> aoi.to_crs(emissions_gdf.crs)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create plot</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">10</span>))</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot AOI in light gray</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>aoi_gdf.plot(ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">'none'</span>, edgecolor<span class="op">=</span><span class="st">'lightgray'</span>, linewidth<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute marker sizes based on E_CO_TN (adjust scaling factor as needed)</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>sizes <span class="op">=</span> emissions_gdf[<span class="st">"E_CO_TN"</span>].fillna(<span class="dv">0</span>) <span class="op">*</span> <span class="dv">5</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot predicted emissions with symbol size proportional to E_CO_TN</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>emissions_gdf.plot(</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>ax,</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">'orange'</span>,</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">=</span><span class="fl">0.6</span>,</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    markersize<span class="op">=</span>sizes</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-8" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read AOI layer</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>aoi <span class="op">=</span> gpd.read_file(aoi_path)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>aoi_gdf <span class="op">=</span> aoi.to_crs(emissions_gdf.crs)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create plot</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">10</span>))</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot AOI in light gray</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>aoi_gdf.plot(ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">'none'</span>, edgecolor<span class="op">=</span><span class="st">'lightgray'</span>, linewidth<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute marker sizes based on E_CO_TN (adjust scaling factor as needed)</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>sizes <span class="op">=</span> emissions_gdf[<span class="st">"E_CO_TN"</span>].fillna(<span class="dv">0</span>) <span class="op">*</span> <span class="dv">5</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot predicted emissions with symbol size proportional to E_CO_TN</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>emissions_gdf.plot(</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>ax,</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">'orange'</span>,</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">=</span><span class="fl">0.6</span>,</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    markersize<span class="op">=</span>sizes</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="SWEEP_estimator_vignette_files/figure-html/cell-6-output-1.png" width="841" height="615" class="figure-img"></p>
+<p><img src="Estimator_Demo_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>In this demo run, we provided “AIR DISTRICT” and “AOI_INDEX” as the aggregation fields. As you can see our results are split by AOI_INDEX (the polygon) and AIR_DISTRICT. We get total emissions for each polygon in each air district.</p>
-<div id="5229b734" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>agg_table.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="15">
+<div id="cell-9" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In this demo run, we provided "AIR DISTRICT" and "AOI_INDEX" as the aggregation fields.</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># As you can see our results are split by AOI_INDEX (the polygon) and AIR_DISTRICT.</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># We get total emissions for each polygon in each air district.</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>agg_table.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
 <div>
 
 
@@ -523,17 +589,17 @@ Complete!</code></pre>
 </div>
 </div>
 </div>
-<p>We can use the full dataframe to add other AOI attributes back in:</p>
-<div id="5be47ada" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>aoi_cols <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> emissions_gdf.columns <span class="cf">if</span> col.startswith(<span class="st">"AOI_"</span>)]</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop duplicates to get unique AOI records</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>unique_aoi <span class="op">=</span> emissions_gdf[aoi_cols].drop_duplicates()</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge with agg_table on AOI_INDEX</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>agg_table_aoi <span class="op">=</span> agg_table.merge(unique_aoi, on<span class="op">=</span><span class="st">"AOI_INDEX"</span>, how<span class="op">=</span><span class="st">"left"</span>)</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>agg_table_aoi.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="16">
+<div id="cell-10" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We can use the full dataframe to add other AOI attributes back in:</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>aoi_cols <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> emissions_gdf.columns <span class="cf">if</span> col.startswith(<span class="st">"AOI_"</span>)]</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Drop duplicates to get unique AOI records</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>unique_aoi <span class="op">=</span> emissions_gdf[aoi_cols].drop_duplicates()</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Merge with agg_table on AOI_INDEX</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>agg_table_aoi <span class="op">=</span> agg_table.merge(unique_aoi, on<span class="op">=</span><span class="st">"AOI_INDEX"</span>, how<span class="op">=</span><span class="st">"left"</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>agg_table_aoi.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
 <div>
 
 
@@ -627,26 +693,31 @@ Complete!</code></pre>
 </div>
 </div>
 </div>
-</section>
-<section id="automated-emissions-estimation-query" class="level2">
-<h2 class="anchored" data-anchor-id="automated-emissions-estimation-query">Automated Emissions Estimation Query</h2>
-<p>In an “automated” query, we can set filter_field, filter_values, and, optionally, date ranges without working through the interactive tool.</p>
-<div id="4bd906e5" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>emissions_gdf_auto, agg_table_auto, vehicle_table_auto <span class="op">=</span> main(</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    get_mode <span class="op">=</span> <span class="st">"use_default"</span>,</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    filter_method <span class="op">=</span> <span class="st">"automated"</span>,</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    filter_field <span class="op">=</span> <span class="st">"Air Basin"</span>,</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    field_values <span class="op">=</span> [<span class="st">"MOUNTAIN COUNTIES"</span>, <span class="st">"SAN JOAQUIN VALLEY"</span>],</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    apply_date_filter <span class="op">=</span> <span class="va">True</span>,</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    start_date <span class="op">=</span> <span class="st">"2018-01-01"</span>,</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    end_date <span class="op">=</span> <span class="st">"2021-01-01"</span>,</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    aggregate_fields<span class="op">=</span>[<span class="st">'AIR DISTRICT'</span>, <span class="st">'YEAR'</span>, <span class="st">'INCIDENT'</span>],</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    write <span class="op">=</span> <span class="st">"No"</span></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Complete!"</span>)</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>emissions_gdf_auto.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="automated-query" class="level2">
+<h2 class="anchored" data-anchor-id="automated-query">Automated query</h2>
+<div id="cell-12" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter spatiallly-- we use two polygon geometries to pull data for known incidents.</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># However, SWEEP doesn't automatically know if there are other fires in the region-- using a date filter is advised.</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>emissions_gdf_auto, agg_table_auto, vehicle_table_auto <span class="op">=</span> main(</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    get_mode <span class="op">=</span> <span class="st">"use_default"</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    filter_method <span class="op">=</span> <span class="st">"automated"</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    filter_field <span class="op">=</span> <span class="st">"Air Basin"</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    field_values <span class="op">=</span> [<span class="st">"MOUNTAIN COUNTIES"</span>, <span class="st">"SAN JOAQUIN VALLEY"</span>],</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    apply_date_filter <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    start_date <span class="op">=</span> <span class="st">"2018-01-01"</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    end_date <span class="op">=</span> <span class="st">"2021-01-01"</span>,</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    aggregate_fields<span class="op">=</span>[<span class="st">'AIR DISTRICT'</span>, <span class="st">'YEAR'</span>, <span class="st">'INCIDENT'</span>],</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    write <span class="op">=</span> <span class="st">"No"</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Complete!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Loading BSDB using use_default...
+Loading BSDB using use_default...
+Applying filter criteria...
+59137 rows after date filtering from 2018-01-01 to 2021-01-01.
+4501 rows after filtering by Air Basin: ['MOUNTAIN COUNTIES', 'SAN JOAQUIN VALLEY'].
+Estimating emissions for pollutants: ['CO', 'NOx', 'SOx', 'PM', 'TOG']...
+C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors
 Applying filter criteria...
 59137 rows after date filtering from 2018-01-01 to 2021-01-01.
 4501 rows after filtering by Air Basin: ['MOUNTAIN COUNTIES', 'SAN JOAQUIN VALLEY'].
@@ -663,9 +734,24 @@ Ratio provided: 1738.08 vehicles estimated using ratio: 1.44
 CARB efs from: C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors\CARB_EFs.xlsx
 Requested pollutants: ['CO', 'NOx', 'SOx', 'PM']
 Returned pollutants: ['CO' 'NOx' 'SOx' 'PM']
+Complete!
+Holder efs from: C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors\Holder_EFs.xlsx
+Requested pollutants: ['CO', 'NOx', 'SOx', 'PM', 'TOG']
+Returned pollutants: ['CO' 'NOx' 'SOx' 'PM' 'TOG']
+Aggregating report by: ['AIR DISTRICT', 'YEAR', 'INCIDENT']...
+Aggregating on: ['AIR DISTRICT', 'YEAR', 'INCIDENT']
+Calculating vehicle emissions with CARB factors...
+1207
+Ratio provided: 1738.08 vehicles estimated using ratio: 1.44
+CARB efs from: C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors\CARB_EFs.xlsx
+Requested pollutants: ['CO', 'NOx', 'SOx', 'PM']
+Returned pollutants: ['CO' 'NOx' 'SOx' 'PM']
 Complete!</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="17">
+</div>
+<div id="cell-13" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>emissions_gdf_auto.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
 <div>
 
 
@@ -683,7 +769,11 @@ Complete!</code></pre>
 <th data-quarto-table-cell-role="th">CAT</th>
 <th data-quarto-table-cell-role="th">SQFT</th>
 <th data-quarto-table-cell-role="th">SQFT_SOURCE</th>
-<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">COUNTY</th>
+<th data-quarto-table-cell-role="th">AIR_BASIN</th>
+<th data-quarto-table-cell-role="th">AIR_DISTRICT</th>
+<th data-quarto-table-cell-role="th">COABDIS</th>
+<th data-quarto-table-cell-role="th">CONSUMPTION_FACTOR</th>
 <th data-quarto-table-cell-role="th">FRAME_FACTOR</th>
 <th data-quarto-table-cell-role="th">CONTENTS_FACTOR</th>
 <th data-quarto-table-cell-role="th">geometry</th>
@@ -709,7 +799,11 @@ Complete!</code></pre>
 <td>SFSS</td>
 <td>1458.000000</td>
 <td>MEDIAN</td>
-<td>...</td>
+<td>Mariposa</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>Mariposa</td>
+<td>22_MC_MPA</td>
+<td>0.95</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-9578.918 -33825.916)</td>
@@ -733,7 +827,11 @@ Complete!</code></pre>
 <td>SFSS</td>
 <td>1752.000000</td>
 <td>PARCEL</td>
-<td>...</td>
+<td>Fresno</td>
+<td>SAN JOAQUIN VALLEY</td>
+<td>San Joaquin Valley Unified</td>
+<td>10_SJV_SJU</td>
+<td>0.00</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (43612.19 -105244.953)</td>
@@ -757,7 +855,11 @@ Complete!</code></pre>
 <td>SFSS</td>
 <td>1391.000000</td>
 <td>PARCEL</td>
-<td>...</td>
+<td>El Dorado</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>El Dorado</td>
+<td>9_MC_ED</td>
+<td>0.00</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-89600.032 90657.664)</td>
@@ -781,7 +883,11 @@ Complete!</code></pre>
 <td>SFSS</td>
 <td>1777.000000</td>
 <td>PARCEL</td>
-<td>...</td>
+<td>El Dorado</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>El Dorado</td>
+<td>9_MC_ED</td>
+<td>0.00</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-89674.345 90491.003)</td>
@@ -805,7 +911,11 @@ Complete!</code></pre>
 <td>SFSS</td>
 <td>1666.421397</td>
 <td>MODEL_A</td>
-<td>...</td>
+<td>El Dorado</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>El Dorado</td>
+<td>9_MC_ED</td>
+<td>0.00</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-89807.299 90485.001)</td>
@@ -820,14 +930,12 @@ Complete!</code></pre>
 </tbody>
 </table>
 
-<p>5 rows × 25 columns</p>
 </div>
 </div>
 </div>
-<p>As specified in “aggregate_fields”, the aggregate table is summarized by year, air district, and fire incident.</p>
-<div id="9364259b" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>agg_table_auto</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="18">
+<div id="cell-14" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>agg_table_auto</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
 <div>
 
 
@@ -1059,7 +1167,6 @@ Complete!</code></pre>
 </div>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
