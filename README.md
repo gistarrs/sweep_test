@@ -94,7 +94,7 @@ Regardless of the query type, users will need to specify get_mode in all queries
 - custom_filename: str. If get_mode = "refresh", writes BSDB from API query to custom_filename in bsdb_dataset folder. If get_mode = "use_custom", reads from custom_filename in bsdb_dataset folder.
 
 #### Handling outputs
-- write: Set to "Yes" to save outputs to disk in the outputs folder, or "No" to keep them in memory.
+- write: Literal["YES", "NO"] = "YES".  "Yes" to saves outputs to disk in the outputs folder, or "NO" doesn't write.
 
 #### Emissions Estimation Parameters
 - ef_choice: Literal["HOLDER", "CARB", "OTHER"] = "HOLDER".  Choice of emission factors dataset:
@@ -156,7 +156,6 @@ Regardless of the query type, users will need to specify get_mode in all queries
 Use this option to explore and filter the BSDB through guided prompts.
 
 Key Parameters:
-- get_mode: "refresh", "use_default" or "use_custom".
 - filter_method="Interactive": Enables step-by-step filtering by county, incident, air basin, air district, and date range.
 - aggregate_fields: Grouping fields for the emissions summary. Options include:
 ["YEAR", "MONTH", "INCIDENT", "COABDIS", "COUNTY", "AIR DISTRICT", "AIR DISTRICT ID", "AIR BASIN"]. Defaults to ['YEAR', 'INCIDENT'].
@@ -169,11 +168,11 @@ emissions_gdf, agg_table, vehicle_table = main(
     write = "Yes"
 )
 ```
+
 #### Spatial query
 Use a polygon shapefile or GeoDataFrame to select structures within specific geographic areas.
 
 Key Parameters:
-- get_mode: "refresh", "use_default" or "use_custom". Uses the most recently cached BSDB file.
 - filter_method="Spatial": Filters data based on the spatial extent of polygon_input.
 - polygon_input: Path to a shapefile or GeoPackage, or a GeoDataFrame with one or more polygons.
 - apply_date_filter: Optional boolean to apply a date range filter.
@@ -182,7 +181,6 @@ Key Parameters:
 - geometry_col: Name of the geometry column if not "geometry".
 - aggregate_fields: - aggregate_fields: Grouping fields for the emissions summary. Options include:
 ["YEAR", "MONTH", "INCIDENT", "COABDIS", "COUNTY", "AIR DISTRICT", "AIR DISTRICT ID", "AIR BASIN", "AOI_INDEX"]. Defaults to ['YEAR', 'INCIDENT']
-- write: Set to "Yes" to save outputs to disk or "No" to keep them in memory.
   
 ```bash
 emissions_gdf, agg_table, vehicle_table = main(
@@ -205,7 +203,6 @@ Key Parameters:
 - end_date: String or datetime object in "YYYY-MM-DD" format, applied if apply_date_filter == True.
 - aggregate_fields: - aggregate_fields: Grouping fields for the emissions summary. Options include:
 ["YEAR", "MONTH", "INCIDENT", "COABDIS", "COUNTY", "AIR DISTRICT", "AIR DISTRICT ID", "AIR BASIN"]. Defaults to ['YEAR', 'INCIDENT']
-- write: Set to "Yes" to save outputs to disk or "No" to keep them in memory.
 
 ```bash
 emissions_gdf_auto, agg_table_auto, vehicle_table_auto = main(
@@ -233,12 +230,16 @@ This tool rougly predicts fire emissions from structures using parcel structure 
 ```bash
 from SWEEP_predictor import main
 ```
+### General Parameters
+The general parameters (aside from get_mode) are the same as those for SWEEP_estimator.
 
+### Predictor Parameters
 - aoi_source: The polygon feature(s) as a path to a .shp or .gpkg or geodataframe.
 - api_key: a LightBox API key. In this example it is loaded from a .env file.
 - ratio_destroyed: The ratio of structures in the dataset to assume destroyed by fire.
-- aggregate_fields: like the estimatory, users provide list, which here can include AOI_INDEX.
-  
+- aggregate_fields:  Grouping fields for the emissions summary. Options include:
+["YEAR", "MONTH", "INCIDENT", "COABDIS", "COUNTY", "AIR DISTRICT", "AIR DISTRICT ID", "AIR BASIN", "AOI_INDEX"]. Defaults to ['YEAR', 'INCIDENT']
+
 ```bash
 predicted_emissions_gdf, agg_table, vehicle_table = main(
     aoi_source = os.path.join(config.demo_dir, "demo_multipoly.shp"),
