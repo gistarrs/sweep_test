@@ -39,7 +39,7 @@ def vehicle_calculator(
         - "COUNT": User will supply count of vehicles estimated to be destroyed.
     
     cr_value: float
-        float: User-specified numeric contents factor.
+        float: User-specified count or ratio (vehicles to structures).
 
     user_vefs : str, optional
         Path to user-supplied emission factors file if vef_choice= "OTHER".
