@@ -49,12 +49,16 @@ SWEEP applies filters based on specific criteria (such as date ranges and geogra
 
 ## Requirements
 Ensure the following libraries are installed:
-- pandas
-- geopandas
-- numpy
-- requests
-- pyogrio
-- -openpyxl
+- pandas>=1.3.0
+- geopandas>=1.0.1
+- numpy>=1.21.0
+- requests>=2.25.0
+- pyogrio>=0.4.0
+- shapely>=2.0.0
+- openpyxl>=3.0.10
+- python-dotenv==1.0.0
+- typing_extensions
+- matplotlib>=3.0.0
 
 You can install these dependencies by running:
 
@@ -62,21 +66,77 @@ You can install these dependencies by running:
 pip install -r requirements.txt
 ```
 
-## Usage
+## Running the Estimator
 
-### Running the Estimator
+__NOTE: The estimator is intended for internal use by CARB and its partners. Obtaining the BSDB dataset requires a CARB organizational ArcGIS online (AGOL) account.__
 
-To execute the full pipeline, run the `SWEEP_estimator.py` script. This will execute the sequence of functions to retrieve data, apply filters, estimate emissions, aggregate the results, and write the outputs.
-For the first run, make sure the bsdb_source is set to 'API' to acquire the data you need! This will write locally to geojson, but updating the bsdb via API periodically is recommended.
-### Command to run the estimator:
+This tool estimates structure fire emissions from the California Burned Structures Database (BSDB). It supports flexible filtering (spatial, automated, interactive) and calculates enissions from structures and, roughly, vehicles consumed by wildfire. Users can use pre-set defaults for emissions factors, contents factors, consumption factors, and frame factors or provide their own values.
+
+### How to run the estimator
 
 ```bash
-python SWEEP_estimator.py
+from SWEEP_estimator import main
+```
+#### Interactive query and getting BSDB data
+- For an initial run (or when you want to update data), ensure the get_mode is set to "refresh". This will require a CARB AGOL account login. If a filename is not provided for optional argument "custom_filename", a date/time stamp and default filename are used. 
+- filter_method = "Interactive" will walk users through the available data and allow them to set nesting filters on county, incident, air basin, air district, and date ranges.
+- aggregate_fields allows users to dictate how they want emissions summed up in an aggregated table output ('YEAR', 'MONTH', 'INCIDENT', 'COABDIS', 'COUNTY', 'DISTRICT', 'DISTRICT ID', 'AIR BASIN')
+- write: "Yes" or "No". Do users want files written to the output folder or just in memory?
+
+```bash
+emissions_gdf, agg_table, vehicle_table = main(
+    get_mode="refresh",
+    filter_method="Interactive",
+    aggregate_fields=["AIR DISTRICT"],
+    write = "Yes"
+)
+```
+#### Spatial query
+- get_mode "use default" reads the most recent bsdb data saved to the data bsdb_dataset folder (by file name).
+- filter_method: setting to "Spatial" will use a file path or geodataframe to estimate emissions for all impacted structures within polygon_input.
+- polygon_input:  A path (str) to a .shp or .gpkg or a geodataframe containing a single polygon or multiple polygons (one per row).
+- apply_date_filter (True or False) allows users to limit the query to a specific date range set by:
+- start_date: "YYYY-MM-DD"
+- end_date: "YYYY-MM-DD"
+- geometry_col can be used to specify a geometry column if it is not "geometry."
+- for spatial queries, aggregate_fields can also include ["AOI_INDEX"], or polygon number, which is automatically assigned.
+  
+```bash
+emissions_gdf, agg_table, vehicle_table = main(
+    get_mode="use_default",
+    filter_method="Spatial",
+    polygon_input = os.path.join(config.demo_dir, "demo_multipoly.shp")
+    aggregate_fields=["AIR DISTRICT", "AOI_INDEX]
+)
 ```
 
-### Running the Predictor
+#### Automated query
+- for those familiar with the tool, this allows users to set the parameters for filter_field, field_values, and date filters without using the interactive tool.
+- filter_field: Choose one: ["Wildfire Name", "Incident Number", "County", "Air Basin", "Air District", "CoAbDis Code"] (not case sensitive).
+- field_value: The values to filter the selected field by (passed as a list). Example: ["Camp"], ["Butte"], ["Camp", "Woolsey"], ["Napa"], [601], etc.
+- apply_date_filter (True or False) allows users to limit the query to a specific date range set by:
+- start_date: "YYYY-MM-DD"
+- end_date: "YYYY-MM-DD"
 
-# __NOTE:__ PREDICTOR WILL NOT CURRENTLY WORK WITHOUT AN EXISTING LOCAL PARCEL DATASET. 
+```bash
+emissions_gdf_auto, agg_table_auto, vehicle_table_auto = main(
+    get_mode = "use_default",
+    filter_method = "automated",
+    filter_field = "Air Basin",
+    field_values = ["MOUNTAIN COUNTIES", "SAN JOAQUIN VALLEY"],
+    apply_date_filter = True,
+    start_date = "2018-01-01",
+    end_date = "2021-01-01",
+    aggregate_fields=['AIR DISTRICT', 'YEAR', 'INCIDENT'],
+    write = "No"
+    )
+print("Complete!")
+```
+
+## Running the Predictor
+
+__NOTE: The predictor is intended for internal use by CARB and requires access to a LightBox API key (ask your CARB GIS contact).__
+
 
 To execute the full pipeline, run the `SWEEP_predictor.py` script, providing the path to a "Area of Interest" file. This will execute the sequence of functions to retrieve data, apply filters, estimate emissions, aggregate the results, and write the outputs.
 
