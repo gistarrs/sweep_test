@@ -7,7 +7,8 @@ SWEEP applies filters based on specific criteria (such as date ranges and geogra
 ## Table of Contents
 - [Installation](#installation)
 - [Requirements](#requirements)
-- [Usage](#usage)
+- [Running the Estimator](#running-the-estimator)
+- [Running the Predictor](#running-the-predictor)
 - [Scripts Overview](#scripts-overview)
 - [Sources](#sources)
 
@@ -70,18 +71,87 @@ pip install -r requirements.txt
 
 __NOTE: The estimator is intended for internal use by CARB and its partners. Obtaining the BSDB dataset requires a CARB organizational ArcGIS online (AGOL) account.__
 
-This tool estimates structure fire emissions from the California Burned Structures Database (BSDB). It supports flexible filtering (spatial, automated, interactive) and calculates enissions from structures and, roughly, vehicles consumed by wildfire. Users can use pre-set defaults for emissions factors, contents factors, consumption factors, and frame factors or provide their own values.
+This tool estimates structure fire emissions from the California Burned Structures Database (BSDB). It supports flexible filtering modes—interactive, spatial, and automated—and calculates emissions from destroyed structures, as well as estimates for vehicles consumed by wildfire.
 
-### How to run the estimator
+Users can rely on built-in defaults for emission factors (EFs), frame/contents fuel load factors, and consumption factors, or supply custom values for each.
+
+### Importing the estimator
 
 ```bash
 from SWEEP_estimator import main
 ```
-#### Interactive query and getting BSDB data
-- For an initial run (or when you want to update data), ensure the get_mode is set to "refresh". This will require a CARB AGOL account login. If a filename is not provided for optional argument "custom_filename", a date/time stamp and default filename are used. 
-- filter_method = "Interactive" will walk users through the available data and allow them to set nesting filters on county, incident, air basin, air district, and date ranges.
-- aggregate_fields allows users to dictate how they want emissions summed up in an aggregated table output ('YEAR', 'MONTH', 'INCIDENT', 'COABDIS', 'COUNTY', 'DISTRICT', 'DISTRICT ID', 'AIR BASIN')
-- write: "Yes" or "No". Do users want files written to the output folder or just in memory?
+
+#### Getting BSDB Data
+Regardless of the query type, users will need to specify get_mode in all queries.
+- get_mode: "refresh", "use_default" or "use_custom". Refresh downloads the latest BSDB dataset and requires a CARB ArcGIS Online login. If custom_filename is not provided, a default name with a timestamp is used. "use_default" can be used afterwards to access a locally saved bsdb. "use_custom" loads a file specified by custom_filename.
+- custom_filename: str. If get_mode = "refresh", writes BSDB from API query to custom_filename in bsdb_dataset folder. If get_mode = "use_custom", reads from custom_filename in bsdb_dataset folder.
+
+#### Handling outputs
+- write: Set to "Yes" to save outputs to disk in the outputs folder, or "No" to keep them in memory.
+
+#### Emissions Estimation Parameters
+- ef_choice: Literal["HOLDER", "CARB", "OTHER"] = "HOLDER".  Choice of emission factors dataset:
+  
+        - "HOLDER": Emission factors from Holder et al. (2023)
+        - "CARB": Emission factors from CARB's internal 1999 process
+        - "OTHER": User provides a custom emissions factors path via `user_efs`
+  
+- frame_factor: Optional[Union[Literal["HOLDER", "CARB"], float]] = "HOLDER". Choice of frame factor source:
+
+        - "HOLDER": Use Holder et al. (2023) frame factor
+        - "CARB": Use CARB frame factor
+        - float: User-specified numeric frame factor
+  
+- contents_factor: Optional[Union[Literal["HOLDER", "CARB"], float]] = "HOLDER". Choice of contents factor source:
+  
+        - "HOLDER": Use Holder et al. (2023) contents factor
+        - "CARB": Use CARB contents factor
+        - float: User-specified numeric contents factor
+
+- structure_consumption: Optional[Literal["HOLDER", "CARB", "DINS3", "DINS5"]] = "DINS3". Determines how to convert damage inspection damage bins into consumption factors.
+
+        - "HOLDER": 80% consumption if damage is Major or Destroyed (DINS categories)
+        - "CARB": 7% consumption if damaged
+        - "DINS3": 
+            0% if No/Minor damage  
+            50% if Major  
+            95% if Destroyed
+        - "DINS5": Uses midpoint of DINS damage percentage bins:
+            0%  No damage  
+            5%  Minor damage  
+            17.5%  Affected  
+            38%  Major  
+            75.5%  Destroyed
+  
+- pollutants: Optional[Union[Literal["ALL"], str, List[str]]] = None. Either "All", None (uses the default, criteria pollutants), or takes a list of pollutants ["CO", "NOx"].
+
+- user_efs: Optional[str] = None. Path to emissions factors .xlsx file if users choose ef_choice "OTHER". Requires "Pollutant" and "Structure_gkg" columns.
+
+- vehicle_ef_choice: Literal["HOLDER", "CARB", "OTHER"] = "CARB". Choice of vehicle emission factors dataset:
+
+        - "HOLDER": Emission factors from Holder et al. (2023)
+        - "CARB": Emission factors from CARB's internal 1999 process
+        - "OTHER": User provides a custom emissions factors path via `user_vefs`
+  
+- vpollutants: Optional[Union[Literal["ALL"], str, List[str]]] = None. Either "All", None (uses the default, criteria pollutants), or takes a list of pollutants ["CO", "NOx"].
+
+- user_vefs: Optional[str] = None. Path to emissions factors .xlsx file if users choose vef_choice "OTHER". Requires "Pollutant" and "Vehicle_gkg" columns.
+
+- vehicle_count_or_ratio: Literal["RATIO", "COUNT"] = "RATIO". Method for estimating number of vehicles. Options:
+
+        - "RATIO": Default. User will supply ratio of vehicles to structures destroyed.
+        - "COUNT": User will supply count of vehicles estimated to be destroyed.
+  
+- vehicle_cr_value: float = 1.44, User-specified ratio (vehicles to structures) if vehicle_count_or_rato = "RATIO" or absolute count (if vehicle_count_or_rato = "COUNT")
+
+#### Interactive query
+Use this option to explore and filter the BSDB through guided prompts.
+
+Key Parameters:
+- get_mode: "refresh", "use_default" or "use_custom".
+- filter_method="Interactive": Enables step-by-step filtering by county, incident, air basin, air district, and date range.
+- aggregate_fields: Grouping fields for the emissions summary. Options include:
+["YEAR", "MONTH", "INCIDENT", "COABDIS", "COUNTY", "AIR DISTRICT", "AIR DISTRICT ID", "AIR BASIN"]. Defaults to ['YEAR', 'INCIDENT'].
 
 ```bash
 emissions_gdf, agg_table, vehicle_table = main(
@@ -92,14 +162,19 @@ emissions_gdf, agg_table, vehicle_table = main(
 )
 ```
 #### Spatial query
-- get_mode "use default" reads the most recent bsdb data saved to the data bsdb_dataset folder (by file name).
-- filter_method: setting to "Spatial" will use a file path or geodataframe to estimate emissions for all impacted structures within polygon_input.
-- polygon_input:  A path (str) to a .shp or .gpkg or a geodataframe containing a single polygon or multiple polygons (one per row).
-- apply_date_filter (True or False) allows users to limit the query to a specific date range set by:
-- start_date: "YYYY-MM-DD"
-- end_date: "YYYY-MM-DD"
-- geometry_col can be used to specify a geometry column if it is not "geometry."
-- for spatial queries, aggregate_fields can also include ["AOI_INDEX"], or polygon number, which is automatically assigned.
+Use a polygon shapefile or GeoDataFrame to select structures within specific geographic areas.
+
+Key Parameters:
+- get_mode: "refresh", "use_default" or "use_custom". Uses the most recently cached BSDB file.
+- filter_method="Spatial": Filters data based on the spatial extent of polygon_input.
+- polygon_input: Path to a shapefile or GeoPackage, or a GeoDataFrame with one or more polygons.
+- apply_date_filter: Optional boolean to apply a date range filter.
+- start_date: String or datetime object in "YYYY-MM-DD" format, applied if apply_date_filter == True.
+- end_date: String or datetime object in "YYYY-MM-DD" format, applied if apply_date_filter == True.
+- geometry_col: Name of the geometry column if not "geometry".
+- aggregate_fields: - aggregate_fields: Grouping fields for the emissions summary. Options include:
+["YEAR", "MONTH", "INCIDENT", "COABDIS", "COUNTY", "AIR DISTRICT", "AIR DISTRICT ID", "AIR BASIN", "AOI_INDEX"]. Defaults to ['YEAR', 'INCIDENT']
+- write: Set to "Yes" to save outputs to disk or "No" to keep them in memory.
   
 ```bash
 emissions_gdf, agg_table, vehicle_table = main(
@@ -111,12 +186,18 @@ emissions_gdf, agg_table, vehicle_table = main(
 ```
 
 #### Automated query
-- for those familiar with the tool, this allows users to set the parameters for filter_field, field_values, and date filters without using the interactive tool.
-- filter_field: Choose one: ["Wildfire Name", "Incident Number", "County", "Air Basin", "Air District", "CoAbDis Code"] (not case sensitive).
-- field_value: The values to filter the selected field by (passed as a list). Example: ["Camp"], ["Butte"], ["Camp", "Woolsey"], ["Napa"], [601], etc.
-- apply_date_filter (True or False) allows users to limit the query to a specific date range set by:
-- start_date: "YYYY-MM-DD"
-- end_date: "YYYY-MM-DD"
+Use this option to programmatically apply filters without interactive prompts.
+
+Key Parameters:
+- filter_method="automated"
+- filter_field: One of ["Wildfire Name", "Incident Number", "County", "Air Basin", "Air District", "CoAbDis Code"] (case-insensitive).
+- field_values: List of values to filter on, e.g. ["Camp"], ["Napa"], ["Camp", "Napa"], [601].
+- apply_date_filter: Optional boolean to apply a date range filter.
+- start_date: String or datetime object in "YYYY-MM-DD" format, applied if apply_date_filter == True.
+- end_date: String or datetime object in "YYYY-MM-DD" format, applied if apply_date_filter == True.
+- aggregate_fields: - aggregate_fields: Grouping fields for the emissions summary. Options include:
+["YEAR", "MONTH", "INCIDENT", "COABDIS", "COUNTY", "AIR DISTRICT", "AIR DISTRICT ID", "AIR BASIN"]. Defaults to ['YEAR', 'INCIDENT']
+- write: Set to "Yes" to save outputs to disk or "No" to keep them in memory.
 
 ```bash
 emissions_gdf_auto, agg_table_auto, vehicle_table_auto = main(
@@ -137,15 +218,35 @@ print("Complete!")
 
 __NOTE: The predictor is intended for internal use by CARB and requires access to a LightBox API key (ask your CARB GIS contact).__
 
+This tool rougly predicts fire emissions from structures using parcel structure square footage data as a proxy for damage inspection data. It extracts parcel records within a user-provided area of interest (either a shapefile/geopackage path or geodataframe), assigns a random subset damage due to fire (based on user-input "ratio_destroyed"), and estimates emissions for those structures and vehicles. Users can use pre-set defaults for emissions factors, contents factors, consumption factors, and frame factors or provide their own values.
 
-To execute the full pipeline, run the `SWEEP_predictor.py` script, providing the path to a "Area of Interest" file. This will execute the sequence of functions to retrieve data, apply filters, estimate emissions, aggregate the results, and write the outputs.
-
-### Command to run the predictor:
+### Importing the predictor
 
 ```bash
-python SWEEP_predictor.py
+from SWEEP_predictor import main
 ```
-You can modify the parameters within config.py, SWEEP_estimator.py, and SWEEP_predictor.py or call specific functions as needed.
+
+- aoi_source: The polygon feature(s) as a path to a .shp or .gpkg or geodataframe.
+- api_key: a LightBox API key. In this example it is loaded from a .env file.
+- ratio_destroyed: The ratio of structures in the dataset to assume destroyed by fire.
+- aggregate_fields: like the estimatory, users provide list, which here can include AOI_INDEX.
+  
+```bash
+predicted_emissions_gdf, agg_table, vehicle_table = main(
+    aoi_source = os.path.join(config.demo_dir, "demo_multipoly.shp"),
+    # You need a lightbox API key to get the parcel data.
+    api_key = os.getenv('LB_API_KEY'),
+    ratio_destroyed = 0.8,
+    pollutants = None, 
+    aggregate_fields = ['AIR DISTRICT', 'AOI_INDEX'],
+    write = "No")
+```
+
+
+
+
+
+
 
 ### Example Outputs (both Estimator and Predictor):
 
