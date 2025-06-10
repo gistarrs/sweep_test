@@ -81,9 +81,16 @@ Users can rely on built-in defaults for emission factors (EFs), frame/contents f
 from SWEEP_estimator import main
 ```
 
+### General Parameters
+
 #### Getting BSDB Data
 Regardless of the query type, users will need to specify get_mode in all queries.
-- get_mode: "refresh", "use_default" or "use_custom". Refresh downloads the latest BSDB dataset and requires a CARB ArcGIS Online login. If custom_filename is not provided, a default name with a timestamp is used. "use_default" can be used afterwards to access a locally saved bsdb. "use_custom" loads a file specified by custom_filename.
+- get_mode: Literal["refresh", "use_default", "use_custom"] = "use_default".
+
+      - "refresh" downloads the latest BSDB dataset and requires a CARB ArcGIS Online login. If custom_filename is not provided, a default name (bsdb_data_timestamped) is used.
+      - "use_default" can be used once a local bsdb is written to access the locally saved bsdb.
+      - "use_custom": loads a file specified by custom_filename.
+  
 - custom_filename: str. If get_mode = "refresh", writes BSDB from API query to custom_filename in bsdb_dataset folder. If get_mode = "use_custom", reads from custom_filename in bsdb_dataset folder.
 
 #### Handling outputs
@@ -144,6 +151,7 @@ Regardless of the query type, users will need to specify get_mode in all queries
   
 - vehicle_cr_value: float = 1.44, User-specified ratio (vehicles to structures) if vehicle_count_or_rato = "RATIO" or absolute count (if vehicle_count_or_rato = "COUNT")
 
+### Query Types
 #### Interactive query
 Use this option to explore and filter the BSDB through guided prompts.
 
