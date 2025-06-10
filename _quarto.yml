@@ -1,0 +1,14 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "SWEEP Estimator Demo"
+  navbar:
+    right:
+      - text: "Demo"
+        href: SWEEP_estimator_vignette.html
+
+format:
+  html:
+    theme: cosmo  # or another theme of your choice

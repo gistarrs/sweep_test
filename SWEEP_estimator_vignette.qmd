@@ -1,0 +1,127 @@
+---
+title: "SWEEP Estimator Demo"
+format:
+  html:
+    toc: true
+jupyter: python3
+---
+
+# Load dependencies
+```{python}
+from SWEEP_estimator import main
+import os
+import geopandas as gpd
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import matplotlib.colors as colors
+
+from sweep import config
+from SWEEP_estimator import main
+print("Imports complete!")
+```
+
+# Emissions Estimator
+The Estimator uses data from CAL FIRE's damage inspection database to identify structures damaged by wildfire.
+It uses parcel and footprint data to esitmate the square footage for each structure.
+
+## Spatial Emissions Estimation Query 
+
+Read in an AOI (optional: take a look!)
+```{python}
+aoi_path = os.path.join(config.demo_dir, "demo_multipoly.shp")
+aoi = gpd.read_file(aoi_path)
+aoi.plot()
+```
+
+The Estimator uses data from CAL FIRE's damage inspection database to identify structures damaged by wildfire.
+It uses parcel and footprint data to esitmate the square footage for each structure.
+
+```{python}
+emissions_gdf, agg_table, vehicle_table = main(
+    get_mode = "use_default",
+    filter_method = "Spatial",
+    polygon_input = aoi,
+    aggregate_fields=['AIR DISTRICT', 'AOI_INDEX']
+    )
+print("Complete!")
+```
+
+In the returned dataframes, columns from the aoi_source are retained and tagged with "AOI" at the start of the column.
+emissions_gdf is a geodataframe of each structure and their estimated emissions, along with parameters used in the 
+estimation processl
+
+```{python}
+print(emissions_gdf.crs)
+emissions_gdf.head(5)
+```
+
+
+As a geodataframe, the output is easily visualized using the geopandas and matplotlib libraries.
+```{python}
+# Read AOI layer
+aoi = gpd.read_file(aoi_path)
+aoi_gdf = aoi.to_crs(emissions_gdf.crs)
+
+# Create plot
+fig, ax = plt.subplots(figsize=(10, 10))
+
+# Plot AOI in light gray
+aoi_gdf.plot(ax=ax, color='none', edgecolor='lightgray', linewidth=1)
+
+# Compute marker sizes based on E_CO_TN (adjust scaling factor as needed)
+sizes = emissions_gdf["E_CO_TN"].fillna(0) * 5
+
+# Plot predicted emissions with symbol size proportional to E_CO_TN
+emissions_gdf.plot(
+    ax=ax,
+    color='orange',
+    alpha=0.6,
+    markersize=sizes
+)
+```
+
+In this demo run, we provided "AIR DISTRICT" and "AOI_INDEX" as the aggregation fields.
+As you can see our results are split by AOI_INDEX (the polygon) and AIR_DISTRICT.
+We get total emissions for each polygon in each air district.
+
+```{python}
+agg_table.head()
+```
+
+We can use the full dataframe to add other AOI attributes back in:
+```{python}
+aoi_cols = [col for col in emissions_gdf.columns if col.startswith("AOI_")]
+
+# Drop duplicates to get unique AOI records
+unique_aoi = emissions_gdf[aoi_cols].drop_duplicates()
+
+# Merge with agg_table on AOI_INDEX
+agg_table_aoi = agg_table.merge(unique_aoi, on="AOI_INDEX", how="left")
+agg_table_aoi.head()
+```
+
+
+## Automated Emissions Estimation Query 
+
+In an "automated" query, we can set filter_field, filter_values, and, optionally, date ranges
+without working through the interactive tool.
+```{python}
+emissions_gdf_auto, agg_table_auto, vehicle_table_auto = main(
+    get_mode = "use_default",
+    filter_method = "automated",
+    filter_field = "Air Basin",
+    field_values = ["MOUNTAIN COUNTIES", "SAN JOAQUIN VALLEY"],
+    apply_date_filter = True,
+    start_date = "2018-01-01",
+    end_date = "2021-01-01",
+    aggregate_fields=['AIR DISTRICT', 'YEAR', 'INCIDENT'],
+    write = "No"
+    )
+print("Complete!")
+emissions_gdf_auto.head()
+```
+
+As specified in "aggregate_fields", the aggregate table is summarized by year, air district, and fire incident.
+```{python}
+agg_table_auto
+```
