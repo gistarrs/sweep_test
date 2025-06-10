@@ -40,6 +40,7 @@ class GetBSDB:
         overwrite: bool = False,
     ) -> None:
         self.data_dir = config.data_dir
+        self.bsdb_dir = config.bsdb_dir
         if org == "IGIS":
             self.agol_portal = config.agol_path_igis
             self.agol_oauth = config.agol_oauth_igis
@@ -62,7 +63,7 @@ class GetBSDB:
 
     def get_geojson_bsdb(self) -> str:
         # Use the 'data' folder inside the current script directory
-        pattern = os.path.join(self.data_dir, "bsdb_data_*.geojson").replace("\\", "/")
+        pattern = os.path.join(self.bsdb_dir, "bsdb_data_*.geojson").replace("\\", "/")
         geojson_files = glob.glob(pattern)
 
         if not geojson_files:
@@ -168,7 +169,7 @@ class GetBSDB:
                 filename = custom_filename if custom_filename.endswith(".geojson") else f"{custom_filename}.geojson"
             else:
                 raise ValueError("custom_filename is required for 'use_custom' mode.")
-            path = os.path.join(self.data_dir, filename)
+            path = os.path.join(self.bsdb_dir, filename)
             if not os.path.exists(path):
                 print(f"{path} does not exist. Use mode = refresh with custom_filename to write new file from API, mode = use_latest for default file, or file name for other existing file in data folder.")
                 raise FileNotFoundError(f"Custom file not found: {path}")
@@ -181,7 +182,7 @@ class GetBSDB:
             else:
                 filename = f"bsdb_data_{timestamp}.geojson"
                 filename = custom_filename if custom_filename else f"bsdb_data_{timestamp}.geojson"
-            path = os.path.join(self.data_dir, filename)
+            path = os.path.join(self.bsdb_dir, filename)
 
             if os.path.exists(path) and not overwrite:
                 raise FileExistsError(f"{path} already exists. Use overwrite=True to replace it.")

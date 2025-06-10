@@ -189,8 +189,6 @@ def main(
         return None, None, None
 
     else:
-        print(filt_bsdb)
-        print(type(filt_bsdb))
         print(f"Estimating emissions for pollutants: {pollutants}...")
         emissions_gdf = estimate_emissions(
             structure_df = filt_bsdb,
@@ -236,6 +234,7 @@ if __name__ == "__main__":
     #     )
     emissions_gdf, agg_table, vehicle_table = main(
         get_mode = "use_default",
+        org = "IGIS",
         filter_method = "interactive",
         aggregate_fields=['AIR DISTRICT']
         )

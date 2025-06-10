@@ -54,6 +54,7 @@ vpollutants_default = ['CO', 'NOx', 'SOx', 'PM']  # fixed missing commas
 script_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.dirname(script_dir)  # one level up from scripts/
 data_dir = os.path.join(root_dir, "data")
+bsdb_dir = os.path.join(data_dir, "bsdb_datasets")
 out_dir = os.path.join(root_dir, "outputs")
 demo_dir = os.path.join(data_dir, "demo_shapes")
 demo_poly = os.path.join(demo_dir, "demo_polygon.shp")
