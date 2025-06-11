@@ -8,7 +8,6 @@ jupyter: python3
 
 # Load dependencies
 ```{python}
-from SWEEP_estimator import main
 import os
 import geopandas as gpd
 import matplotlib.pyplot as plt
@@ -16,7 +15,7 @@ import matplotlib.cm as cm
 import matplotlib.colors as colors
 
 from sweep import config
-from SWEEP_estimator import main as sweep_estimator
+from sweep.estimator_main import sweep_estimator
 print("Imports complete!")
 ```
 
@@ -98,7 +97,7 @@ agg_table_aoi.head()
 In an "automated" query, we can set filter_field, filter_values, and, optionally, date ranges
 without working through the interactive tool.
 ```{python}
-emissions_gdf_auto, agg_table_auto, vehicle_table_auto = main(
+emissions_gdf_auto, agg_table_auto, vehicle_table_auto = sweep_estimator(
     get_mode = "use_default",
     filter_method = "automated",
     filter_field = "Air Basin",
@@ -121,9 +120,7 @@ agg_table_auto
 # Emissions Predictor
 
 ```{python}
-from sweep import config
-from SWEEP_predictor import main as sweep_predictor
-
+from sweep.predictor_main import sweep_predictor
 from dotenv import load_dotenv
 load_dotenv() 
 ```
