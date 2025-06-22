@@ -28,7 +28,8 @@ class GetParcels:
         """
         
         self.crs = crs
-        self.api_key = api_key 
+        self.api_key = api_key
+        self.parcel_url = config.lightbox_url_template
 
         if isinstance(aoi_source, str):
             self.aoi_path = aoi_source
@@ -69,7 +70,11 @@ class GetParcels:
             RuntimeError: If a request to the API returns a non-200 status code.
         """
 
-        url = f"https://api.lightboxre.com/v1/{query_type}/us/geometry"
+        #url = f"https://api.lightboxre.com/v1/{query_type}/us/geometry"
+        
+        url = self.parcel_url.format(query_type=query_type)
+        print(url)
+
         headers = {
             "accept": "application/json",
             "x-api-key": self.api_key
@@ -90,9 +95,9 @@ class GetParcels:
 
                 response = requests.get(url, headers=headers, params=params)
 
-                print(f"Offset: {offset}, Limit: {limit}")
-                print(f"Request URL: {response.url}")
-                print(f"Status code: {response.status_code}")
+                #print(f"Offset: {offset}, Limit: {limit}")
+                # print(f"Request URL: {response.url}")
+                print(f"Offset: {offset}, Limit: {limit}, Status code: {response.status_code}")
 
                 if response.status_code != 200:
                     raise RuntimeError(f"Request failed: {response.status_code} - {response.text}")

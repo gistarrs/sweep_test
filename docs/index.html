@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>SWEEP Demo – SWEEP Estimator Demo</title>
+<title>Structure Wildfire Emissions Estimator and Predictor Demo – Structure Wildfire Emissions Estimator and Predictor</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -118,7 +118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">SWEEP Estimator Demo</span>
+    <span class="navbar-title">Structure Wildfire Emissions Estimator and Predictor</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -128,7 +128,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./SWEEP_estimator_vignette.html"> 
+    <a class="nav-link" href="./SWEEP_vignette.html"> 
 <span class="menu-text">Demo</span></a>
   </li>  
 </ul>
@@ -150,10 +150,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#load-dependencies" id="toc-load-dependencies" class="nav-link active" data-scroll-target="#load-dependencies">Load dependencies</a></li>
   <li><a href="#emissions-estimator" id="toc-emissions-estimator" class="nav-link" data-scroll-target="#emissions-estimator">Emissions Estimator</a>
   <ul class="collapse">
-  <li><a href="#spatial-emissions-estimation-query" id="toc-spatial-emissions-estimation-query" class="nav-link" data-scroll-target="#spatial-emissions-estimation-query">Spatial Emissions Estimation Query</a></li>
-  <li><a href="#automated-emissions-estimation-query" id="toc-automated-emissions-estimation-query" class="nav-link" data-scroll-target="#automated-emissions-estimation-query">Automated Emissions Estimation Query</a></li>
+  <li><a href="#spatial-emissions-estimation-query" id="toc-spatial-emissions-estimation-query" class="nav-link" data-scroll-target="#spatial-emissions-estimation-query">Spatial Emissions Estimation Query</a>
+  <ul class="collapse">
+  <li><a href="#read-in-or-point-to-an-aoi" id="toc-read-in-or-point-to-an-aoi" class="nav-link" data-scroll-target="#read-in-or-point-to-an-aoi">Read in or point to an AOI</a></li>
+  <li><a href="#run-sweep_estimator" id="toc-run-sweep_estimator" class="nav-link" data-scroll-target="#run-sweep_estimator">Run sweep_estimator</a></li>
+  <li><a href="#outputs" id="toc-outputs" class="nav-link" data-scroll-target="#outputs">Outputs</a></li>
   </ul></li>
-  <li><a href="#emissions-predictor" id="toc-emissions-predictor" class="nav-link" data-scroll-target="#emissions-predictor">Emissions Predictor</a></li>
+  <li><a href="#automated-emissions-estimation-query" id="toc-automated-emissions-estimation-query" class="nav-link" data-scroll-target="#automated-emissions-estimation-query">Automated Emissions Estimation Query</a>
+  <ul class="collapse">
+  <li><a href="#run-sweep_estimator-with-pre-set-filter-fields" id="toc-run-sweep_estimator-with-pre-set-filter-fields" class="nav-link" data-scroll-target="#run-sweep_estimator-with-pre-set-filter-fields">Run sweep_estimator with pre-set filter fields</a></li>
+  <li><a href="#outputs-1" id="toc-outputs-1" class="nav-link" data-scroll-target="#outputs-1">Outputs</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#emissions-predictor" id="toc-emissions-predictor" class="nav-link" data-scroll-target="#emissions-predictor">Emissions Predictor</a>
+  <ul class="collapse">
+  <li><a href="#read-in-or-point-to-an-aoi-1" id="toc-read-in-or-point-to-an-aoi-1" class="nav-link" data-scroll-target="#read-in-or-point-to-an-aoi-1">Read in or point to an AOI</a></li>
+  <li><a href="#run-sweep_predictor" id="toc-run-sweep_predictor" class="nav-link" data-scroll-target="#run-sweep_predictor">Run sweep_predictor</a></li>
+  <li><a href="#outputs-2" id="toc-outputs-2" class="nav-link" data-scroll-target="#outputs-2">Outputs</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -162,7 +176,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">SWEEP Demo</h1>
+<h1 class="title">Structure Wildfire Emissions Estimator and Predictor Demo</h1>
 </div>
 
 
@@ -181,16 +195,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="load-dependencies" class="level1">
 <h1>Load dependencies</h1>
-<div id="5a3dc77d" class="cell" data-execution_count="1">
+<div id="54f36437" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.cm <span class="im">as</span> cm</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.colors <span class="im">as</span> colors</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sweep <span class="im">import</span> config</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sweep.estimator_main <span class="im">import</span> sweep_estimator</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Imports complete!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.cm <span class="im">as</span> cm</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.colors <span class="im">as</span> colors</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sweep <span class="im">import</span> config</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sweep.estimator_main <span class="im">import</span> sweep_estimator</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Imports complete!"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># We'll set this option so it doesn't abbreviate dataframes.</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">'display.max_columns'</span>, <span class="va">None</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Imports complete!</code></pre>
 </div>
@@ -198,14 +216,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="emissions-estimator" class="level1">
 <h1>Emissions Estimator</h1>
-<p>The Estimator uses data from CAL FIRE’s damage inspection database to identify structures damaged by wildfire. It uses parcel and footprint data to esitmate the square footage for each structure.</p>
+<p>SWEEP is designed to perform emissions estimation using user-specified selections for spatial extent and emissions factors. It accesses a hosted database of structures impacted by wildfire in California from 2018 to the present that includes damage inspection and structure information, including square footage.</p>
+<p>Using the estimator, users can pull emissions estimation from the database using three query methods:</p>
+<ul>
+<li><strong>Interactive</strong> – walks users through building a query step-by-step.</li>
+<li><strong>Spatial</strong> – users provide a polygon geometry shapefile or geopackage and (optional) a date range.</li>
+<li><strong>Automated</strong> – users provide a filter field, filter value, and (optional) date range.</li>
+</ul>
+<p>In addition to a query type, users can use defaults or specify estimation parameters to use for emissions estimation.</p>
+<p>Here we demonstrate a spatial query and an automated query (the input method for the interactive filter won’t work in this file). I highly recommend the interactive filter as a way to explore the data and understand the available filtering options.</p>
 <section id="spatial-emissions-estimation-query" class="level2">
 <h2 class="anchored" data-anchor-id="spatial-emissions-estimation-query">Spatial Emissions Estimation Query</h2>
-<p>Read in an AOI (optional: take a look!)</p>
-<div id="12699ec4" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>aoi_path <span class="op">=</span> os.path.join(config.demo_dir, <span class="st">"demo_multipoly.shp"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>aoi <span class="op">=</span> gpd.read_file(aoi_path)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>aoi.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="read-in-or-point-to-an-aoi" class="level3">
+<h3 class="anchored" data-anchor-id="read-in-or-point-to-an-aoi">Read in or point to an AOI</h3>
+<ul>
+<li>For the spatial filter, users can provide a path to a shapefile (.shp) or geopackage, or use a geodataframe object.</li>
+<li>It can have one or multiple polygons. In the tool output, columns from the polygon_input are retained and tagged with “AOI” at the start of the column.</li>
+</ul>
+<div id="8458f151" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Here we read in a file so we can take a look first-- however, aoi_path could also be used as the input for "polygon_input".</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Mosquito (2022) and River (2021) fires.</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>aoi_path <span class="op">=</span> os.path.join(config.demo_dir, <span class="st">"demo_multipoly.shp"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>aoi <span class="op">=</span> gpd.read_file(aoi_path)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>aoi.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -214,15 +247,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>The Estimator uses data from CAL FIRE’s damage inspection database to identify structures damaged by wildfire. It uses parcel and footprint data to esitmate the square footage for each structure.</p>
-<div id="8880c603" class="cell" data-execution_count="3">
+</section>
+<section id="run-sweep_estimator" class="level3">
+<h3 class="anchored" data-anchor-id="run-sweep_estimator">Run sweep_estimator</h3>
+<p>Here we run the main function, <strong>sweep_estimator</strong>.</p>
+<ul>
+<li>We use the <strong>get_mode</strong> “use_default”, but as stated in the readme users who need to download or refresh the database should use get_mode = “refresh”. <strong>NOTE:</strong> using “refresh” to pull from the burned structure database requires access to a CARB ArcGIS online organizational login.</li>
+<li><strong>polygon_input</strong> can either be a gdf (as in this case) or a path.</li>
+<li>We can include ‘AOI_INDEX’ in <strong>aggregation_fields</strong> for a summarized output file to ensure we get a summary per polygon in our aoi dataset.</li>
+<li>Note the three outputs: <strong>emissions_gdf</strong> (a geodataframe of each structure and its emissions), <strong>agg_table</strong> (a summary dataframe), and <strong>vehicle_table</strong>.</li>
+</ul>
+<div id="2f9083c8" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>emissions_gdf, agg_table, vehicle_table <span class="op">=</span> sweep_estimator(</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    get_mode <span class="op">=</span> <span class="st">"use_default"</span>,</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    filter_method <span class="op">=</span> <span class="st">"Spatial"</span>,</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    polygon_input <span class="op">=</span> aoi,</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    aggregate_fields<span class="op">=</span>[<span class="st">'AIR DISTRICT'</span>, <span class="st">'AOI_INDEX'</span>]</span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Complete!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Complete!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Loading BSDB using use_default...
 Applying filter criteria...
@@ -236,27 +279,29 @@ Reprojecting polygon from EPSG:4326 to EPSG:3310.
 0      FRAP  MULTIPOLYGON (((-120.56853 38.98437, -120.5686...  
 1      FRAP  POLYGON ((-120.99035 39.0844, -120.99116 39.08...  .
 Estimating emissions for pollutants: ['CO', 'NOx', 'SOx', 'PM', 'TOG']...
-C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors
 Holder efs from: C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors\Holder_EFs.xlsx
 Requested pollutants: ['CO', 'NOx', 'SOx', 'PM', 'TOG']
 Returned pollutants: ['CO' 'NOx' 'SOx' 'PM' 'TOG']
 Aggregating report by: ['AIR DISTRICT', 'AOI_INDEX']...
-Aggregating on: ['AIR DISTRICT', 'AOI_INDEX']
-Calculating vehicle emissions with CARB factors...
-216
-Ratio provided: 311.03999999999996 vehicles estimated using ratio: 1.44
-CARB efs from: C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors\CARB_EFs.xlsx
+Calculating vehicle emissions with HOLDER factors...
+Ratio provided: 311.04 vehicles estimated using ratio: 1.44
+Holder efs from: C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors\Holder_EFs.xlsx
 Requested pollutants: ['CO', 'NOx', 'SOx', 'PM']
 Returned pollutants: ['CO' 'NOx' 'SOx' 'PM']
-Writing Emissions Report to C:\Users\gstarrs\Projects\CARB\sweep_test\outputs\SWEEP_20250611_123133\Emissions_Report.xlsx
-Writing Aggregated Report to C:\Users\gstarrs\Projects\CARB\sweep_test\outputs\SWEEP_20250611_123133\Aggregated_Report.xlsx
-Writing Vehicle Report to C:\Users\gstarrs\Projects\CARB\sweep_test\outputs\SWEEP_20250611_123133\Vehicle_Report.xlsx
-Spatial data written to C:\Users\gstarrs\Projects\CARB\sweep_test\outputs\SWEEP_20250611_123133\Emissions_Spatial.gpkg
+Reports written to folder: C:\Users\gstarrs\Projects\CARB\sweep_test\outputs\SWEEP_20250621_221211
+Tabular reports written.
+Spatial data written to C:\Users\gstarrs\Projects\CARB\sweep_test\outputs\SWEEP_20250621_221211\Emissions_Spatial.gpkg
 Complete!</code></pre>
 </div>
 </div>
-<p>In the returned dataframes, columns from the aoi_source are retained and tagged with “AOI” at the start of the column. emissions_gdf is a geodataframe of each structure and their estimated emissions, along with parameters used in the estimation processl</p>
-<div id="9a7a075a" class="cell" data-execution_count="4">
+</section>
+<section id="outputs" class="level3">
+<h3 class="anchored" data-anchor-id="outputs">Outputs</h3>
+<p>In the returned dataframes, columns from the aoi_source are retained and tagged with “AOI” at the start of the column.</p>
+<section id="emissions-report" class="level4">
+<h4 class="anchored" data-anchor-id="emissions-report"><strong>Emissions Report</strong></h4>
+<p>emissions_gdf is a geodataframe of each structure and their estimated emissions, along with parameters used in the estimation process.</p>
+<div id="80c7beda" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(emissions_gdf.crs)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>emissions_gdf.head(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -280,7 +325,17 @@ Complete!</code></pre>
 <th data-quarto-table-cell-role="th">INCIDENTNUM</th>
 <th data-quarto-table-cell-role="th">START_DATE</th>
 <th data-quarto-table-cell-role="th">GLOBALID_DINS</th>
-<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">DAMAGE</th>
+<th data-quarto-table-cell-role="th">STRUCTURETYPE</th>
+<th data-quarto-table-cell-role="th">STRUCTURECATEGORY</th>
+<th data-quarto-table-cell-role="th">CAT</th>
+<th data-quarto-table-cell-role="th">SQFT</th>
+<th data-quarto-table-cell-role="th">SQFT_SOURCE</th>
+<th data-quarto-table-cell-role="th">COUNTY</th>
+<th data-quarto-table-cell-role="th">AIR_BASIN</th>
+<th data-quarto-table-cell-role="th">AIR_DISTRICT</th>
+<th data-quarto-table-cell-role="th">COABDIS</th>
+<th data-quarto-table-cell-role="th">CONSUMPTION_FACTOR</th>
 <th data-quarto-table-cell-role="th">FRAME_FACTOR</th>
 <th data-quarto-table-cell-role="th">CONTENTS_FACTOR</th>
 <th data-quarto-table-cell-role="th">geometry</th>
@@ -306,7 +361,17 @@ Complete!</code></pre>
 <td>CANEU 020628</td>
 <td>2021-08-04</td>
 <td>{5A6B63E7-0584-4A3D-9566-D1BED0D23610}</td>
-<td>...</td>
+<td>Destroyed (&gt;50%)</td>
+<td>Single Family Residence Single Story</td>
+<td>Single Residence</td>
+<td>SFSS</td>
+<td>1458.0</td>
+<td>MEDIAN</td>
+<td>Placer</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>Placer</td>
+<td>31_MC_PLA</td>
+<td>0.95</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-84115.053 121871.211)</td>
@@ -330,7 +395,17 @@ Complete!</code></pre>
 <td>CANEU 020628</td>
 <td>2021-08-04</td>
 <td>{28A405D3-B735-4C6A-9030-5DB781554E63}</td>
-<td>...</td>
+<td>Destroyed (&gt;50%)</td>
+<td>Single Family Residence Single Story</td>
+<td>Single Residence</td>
+<td>SFSS</td>
+<td>1458.0</td>
+<td>MEDIAN</td>
+<td>Placer</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>Placer</td>
+<td>31_MC_PLA</td>
+<td>0.95</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-84075.412 121847.802)</td>
@@ -354,7 +429,17 @@ Complete!</code></pre>
 <td>CANEU 020628</td>
 <td>2021-08-04</td>
 <td>{A8436F57-068C-4D19-B659-48B51EE6DCA0}</td>
-<td>...</td>
+<td>Destroyed (&gt;50%)</td>
+<td>Single Family Residence Single Story</td>
+<td>Single Residence</td>
+<td>SFSS</td>
+<td>1458.0</td>
+<td>MEDIAN</td>
+<td>Placer</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>Placer</td>
+<td>31_MC_PLA</td>
+<td>0.95</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-84093.56 121769.283)</td>
@@ -378,7 +463,17 @@ Complete!</code></pre>
 <td>CANEU 020628</td>
 <td>2021-08-04</td>
 <td>{18869BDE-69CE-4F93-B844-2F9C416A57CD}</td>
-<td>...</td>
+<td>No Damage</td>
+<td>Single Family Residence Single Story</td>
+<td>Single Residence</td>
+<td>SFSS</td>
+<td>2411.0</td>
+<td>PARCEL</td>
+<td>Placer</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>Placer</td>
+<td>31_MC_PLA</td>
+<td>0.00</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-84135.956 121591.938)</td>
@@ -402,7 +497,17 @@ Complete!</code></pre>
 <td>CANEU 020628</td>
 <td>2021-08-04</td>
 <td>{84EC24BE-B097-4FB8-8287-406BB9929E4F}</td>
-<td>...</td>
+<td>Destroyed (&gt;50%)</td>
+<td>Single Family Residence Single Story</td>
+<td>Single Residence</td>
+<td>SFSS</td>
+<td>1458.0</td>
+<td>MEDIAN</td>
+<td>Placer</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>Placer</td>
+<td>31_MC_PLA</td>
+<td>0.95</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-83735.224 122402.04)</td>
@@ -417,24 +522,30 @@ Complete!</code></pre>
 </tbody>
 </table>
 
-<p>5 rows × 31 columns</p>
 </div>
 </div>
 </div>
 <p>As a geodataframe, the output is easily visualized using the geopandas and matplotlib libraries.</p>
-<div id="4f590138" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>aoi <span class="op">=</span> gpd.read_file(aoi_path)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>aoi_gdf <span class="op">=</span> aoi.to_crs(emissions_gdf.crs)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">8</span>))</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>aoi_gdf.plot(ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">'none'</span>, edgecolor<span class="op">=</span><span class="st">'lightgray'</span>, linewidth<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>sizes <span class="op">=</span> emissions_gdf[<span class="st">"E_CO_TN"</span>].fillna(<span class="dv">0</span>) <span class="op">*</span> <span class="dv">5</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>emissions_gdf.plot(</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>ax,</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">'orange'</span>,</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">=</span><span class="fl">0.6</span>,</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    markersize<span class="op">=</span>sizes</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Emissions Map (CO in Tons)"</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="b9dfcd08" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the AOI in to use as a base layer</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>aoi <span class="op">=</span> gpd.read_file(aoi_path)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Project to match emissions gdf</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>aoi_gdf <span class="op">=</span> aoi.to_crs(emissions_gdf.crs)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">8</span>))</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>aoi_gdf.plot(ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">'none'</span>, edgecolor<span class="op">=</span><span class="st">'lightgray'</span>, linewidth<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Scale the dots based off of emissions of CO.</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>sizes <span class="op">=</span> emissions_gdf[<span class="st">"E_CO_TN"</span>].fillna(<span class="dv">0</span>) <span class="op">*</span> <span class="dv">5</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>emissions_gdf.plot(</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>ax,</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">'orange'</span>,</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">=</span><span class="fl">0.6</span>,</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    markersize<span class="op">=</span>sizes</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Emissions Map (CO in Tons)"</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>Text(0.5, 1.0, 'Emissions Map (CO in Tons)')</code></pre>
 </div>
@@ -446,8 +557,11 @@ Complete!</code></pre>
 </div>
 </div>
 </div>
+</section>
+<section id="aggregated-table" class="level4">
+<h4 class="anchored" data-anchor-id="aggregated-table"><strong>Aggregated Table</strong></h4>
 <p>In this demo run, we provided “AIR DISTRICT” and “AOI_INDEX” as the aggregation fields. As you can see our results are split by AOI_INDEX (the polygon) and AIR_DISTRICT. We get total emissions for each polygon in each air district.</p>
-<div id="0211b6e7" class="cell" data-execution_count="6">
+<div id="1974b9af" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>agg_table.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <div>
@@ -519,15 +633,16 @@ Complete!</code></pre>
 </div>
 </div>
 <p>We can use the full dataframe to add other AOI attributes back in:</p>
-<div id="b99e8ec8" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>aoi_cols <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> emissions_gdf.columns <span class="cf">if</span> col.startswith(<span class="st">"AOI_"</span>)]</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop duplicates to get unique AOI records</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>unique_aoi <span class="op">=</span> emissions_gdf[aoi_cols].drop_duplicates()</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge with agg_table on AOI_INDEX</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>agg_table_aoi <span class="op">=</span> agg_table.merge(unique_aoi, on<span class="op">=</span><span class="st">"AOI_INDEX"</span>, how<span class="op">=</span><span class="st">"left"</span>)</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>agg_table_aoi.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="b8b6a752" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the full list of AOI_ columns from the emissions_gdf dataframe</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>aoi_cols <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> emissions_gdf.columns <span class="cf">if</span> col.startswith(<span class="st">"AOI_"</span>)]</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop duplicates to get unique AOI records</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>unique_aoi <span class="op">=</span> emissions_gdf[aoi_cols].drop_duplicates()</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge with agg_table on AOI_INDEX</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>agg_table_aoi <span class="op">=</span> agg_table.merge(unique_aoi, on<span class="op">=</span><span class="st">"AOI_INDEX"</span>, how<span class="op">=</span><span class="st">"left"</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>agg_table_aoi.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <div>
 
@@ -623,44 +738,125 @@ Complete!</code></pre>
 </div>
 </div>
 </section>
+<section id="vehicle-table" class="level4">
+<h4 class="anchored" data-anchor-id="vehicle-table"><strong>Vehicle Table</strong></h4>
+<p>A very rough estimation of emissions from vehicles (currently there is no statewide open-source real-time report of vehicles destroyed by wildfire). The default method is to estimate the count of vehicles as 1.44 vehicle destroyed per structure destroyed (consumption &gt;50%), a method obtained from Holder et al.&nbsp;2023. Users can specify what emissions factors and pollutants to use in the <strong>vef_choice</strong> and <strong>vpollutants</strong> arguments in sweep_estimator.</p>
+<div id="688adcf4" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>vehicle_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">POLLUTANT</th>
+<th data-quarto-table-cell-role="th">VEHICLE_GFIRE</th>
+<th data-quarto-table-cell-role="th">VEHICLE_GKG</th>
+<th data-quarto-table-cell-role="th">VEHICLES</th>
+<th data-quarto-table-cell-role="th">TOTAL_VEHICLE_EMISSIONS_TN</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">1</td>
+<td>CO</td>
+<td>22128.0</td>
+<td>48.0</td>
+<td>311.04</td>
+<td>7.59</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2</td>
+<td>NOx</td>
+<td>1844.0</td>
+<td>4.0</td>
+<td>311.04</td>
+<td>0.63</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>SOx</td>
+<td>875.9</td>
+<td>1.9</td>
+<td>311.04</td>
+<td>0.30</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">15</td>
+<td>PM</td>
+<td>26369.2</td>
+<td>57.2</td>
+<td>311.04</td>
+<td>9.04</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
 <section id="automated-emissions-estimation-query" class="level2">
 <h2 class="anchored" data-anchor-id="automated-emissions-estimation-query">Automated Emissions Estimation Query</h2>
-<p>In an “automated” query, we can set filter_field, filter_values, and, optionally, date ranges without working through the interactive tool.</p>
-<div id="cde1ee1d" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>emissions_gdf_auto, agg_table_auto, vehicle_table_auto <span class="op">=</span> sweep_estimator(</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    get_mode <span class="op">=</span> <span class="st">"use_default"</span>,</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    filter_method <span class="op">=</span> <span class="st">"automated"</span>,</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    filter_field <span class="op">=</span> <span class="st">"Air Basin"</span>,</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    field_values <span class="op">=</span> [<span class="st">"MOUNTAIN COUNTIES"</span>, <span class="st">"SAN JOAQUIN VALLEY"</span>],</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    apply_date_filter <span class="op">=</span> <span class="va">True</span>,</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    start_date <span class="op">=</span> <span class="st">"2018-01-01"</span>,</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    end_date <span class="op">=</span> <span class="st">"2021-01-01"</span>,</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    aggregate_fields<span class="op">=</span>[<span class="st">'AIR DISTRICT'</span>, <span class="st">'YEAR'</span>, <span class="st">'INCIDENT'</span>],</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    write <span class="op">=</span> <span class="st">"No"</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Complete!"</span>)</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>emissions_gdf_auto.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>In an “automated” query, we can set <strong>filter_field</strong>, <strong>filter_values</strong>, and, optionally, date ranges (<strong>apply_date_filter, start_date,</strong> and <strong>end_date</strong>).</li>
+<li>This allows users to run a query without working through the interactive tool.</li>
+<li>If you’re savvy you can loop over date ranges or other filter_fields/filter_values to get a series of reports.</li>
+<li>If running in an IDE, hovering over any function should provide typing hints and parameter information.</li>
+</ul>
+<section id="run-sweep_estimator-with-pre-set-filter-fields" class="level3">
+<h3 class="anchored" data-anchor-id="run-sweep_estimator-with-pre-set-filter-fields">Run sweep_estimator with pre-set filter fields</h3>
+<div id="210e633f" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>emissions_gdf_auto, agg_table_auto, vehicle_table_auto <span class="op">=</span> sweep_estimator(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    get_mode <span class="op">=</span> <span class="st">"use_default"</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    filter_method <span class="op">=</span> <span class="st">"automated"</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    filter_field <span class="op">=</span> <span class="st">"Air Basin"</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    field_values <span class="op">=</span> [<span class="st">"MOUNTAIN COUNTIES"</span>, <span class="st">"SAN JOAQUIN VALLEY"</span>],</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    apply_date_filter <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    start_date <span class="op">=</span> <span class="st">"2018-01-01"</span>,</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    end_date <span class="op">=</span> <span class="st">"2021-01-01"</span>,</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    aggregate_fields<span class="op">=</span>[<span class="st">'AIR DISTRICT'</span>, <span class="st">'YEAR'</span>, <span class="st">'INCIDENT'</span>],</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Adding a few more arguments-- here we specify the emissions factor source (HOLDER)</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    ef_choice <span class="op">=</span> <span class="st">"HOLDER"</span>,</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># And here we override the default to say we want ALL the pollutants available for the emissions factor source.</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    pollutants <span class="op">=</span> <span class="st">"All"</span>,</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    write <span class="op">=</span> <span class="st">"No"</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Complete!"</span>)</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>emissions_gdf_auto.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Loading BSDB using use_default...
 Applying filter criteria...
 59137 rows after date filtering from 2018-01-01 to 2021-01-01.
 4501 rows after filtering by Air Basin: ['MOUNTAIN COUNTIES', 'SAN JOAQUIN VALLEY'].
-Estimating emissions for pollutants: ['CO', 'NOx', 'SOx', 'PM', 'TOG']...
-C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors
+Estimating emissions for pollutants: All...
 Holder efs from: C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors\Holder_EFs.xlsx
-Requested pollutants: ['CO', 'NOx', 'SOx', 'PM', 'TOG']
-Returned pollutants: ['CO' 'NOx' 'SOx' 'PM' 'TOG']
+Requested pollutants: All
+Returned pollutants: ['CO2' 'CO' 'NOx' 'NO' 'NO2 ' 'HCN' 'NH3' 'SO2' 'SOx' 'H2S' 'HCl' 'HBr'
+ 'HF' 'THC' 'Isocyanates' 'PM' 'Elemental Carbon' 'Organic Carbon' 'Pb'
+ 'Sb' 'Cl' 'Br' 'TOG' 'Benzene' 'Chlorobenzene' 'Toluene' 'Ethylbenzene'
+ 'Ethynylbenzene' 'Styrene' 'Ethene' 'Phenol' 'Pyridine' 'Benzonitrile'
+ 'Formaldehyde' 'Acetaldehyde' 'Acrolein' 'PAH' 'Naphthalene'
+ 'Acenaphthene' 'Acenaphthylene' 'Methylnaphthalenes' 'Biphenyl' 'Indene'
+ 'Fluorene' 'Phenanthrene' 'Anthracene' 'Fluoranthene' 'Pyrene'
+ 'Benzo(a)fluorene' 'Benzo(b)fluorene' 'Benz(a)anthracene' 'Chrysene'
+ 'Benzo(b)fluoranthene' 'Benzo(k)fluoranthene' 'Benzo(a)pyrene'
+ 'Benzo(e)pyrene' 'Perylene' 'Indeno(1,2,3-c,d)pyrene'
+ 'Benzo(g,h,i,)perylene' 'Dibenzo(a,h)anthracene' 'Coronene' 'PCDD' 'PCDF']
 Aggregating report by: ['AIR DISTRICT', 'YEAR', 'INCIDENT']...
-Aggregating on: ['AIR DISTRICT', 'YEAR', 'INCIDENT']
-Calculating vehicle emissions with CARB factors...
-1207
+Calculating vehicle emissions with HOLDER factors...
 Ratio provided: 1738.08 vehicles estimated using ratio: 1.44
-CARB efs from: C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors\CARB_EFs.xlsx
+Holder efs from: C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors\Holder_EFs.xlsx
 Requested pollutants: ['CO', 'NOx', 'SOx', 'PM']
 Returned pollutants: ['CO' 'NOx' 'SOx' 'PM']
 Complete!</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="8">
+<div class="cell-output cell-output-display" data-execution_count="9">
 <div>
 
 
@@ -678,22 +874,84 @@ Complete!</code></pre>
 <th data-quarto-table-cell-role="th">CAT</th>
 <th data-quarto-table-cell-role="th">SQFT</th>
 <th data-quarto-table-cell-role="th">SQFT_SOURCE</th>
-<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">COUNTY</th>
+<th data-quarto-table-cell-role="th">AIR_BASIN</th>
+<th data-quarto-table-cell-role="th">AIR_DISTRICT</th>
+<th data-quarto-table-cell-role="th">COABDIS</th>
+<th data-quarto-table-cell-role="th">CONSUMPTION_FACTOR</th>
 <th data-quarto-table-cell-role="th">FRAME_FACTOR</th>
 <th data-quarto-table-cell-role="th">CONTENTS_FACTOR</th>
 <th data-quarto-table-cell-role="th">geometry</th>
+<th data-quarto-table-cell-role="th">E_CO2_TN</th>
 <th data-quarto-table-cell-role="th">E_CO_TN</th>
 <th data-quarto-table-cell-role="th">E_NOX_TN</th>
+<th data-quarto-table-cell-role="th">E_NO_TN</th>
+<th data-quarto-table-cell-role="th">E_NO2 _TN</th>
+<th data-quarto-table-cell-role="th">E_HCN_TN</th>
+<th data-quarto-table-cell-role="th">E_NH3_TN</th>
+<th data-quarto-table-cell-role="th">E_SO2_TN</th>
 <th data-quarto-table-cell-role="th">E_SOX_TN</th>
+<th data-quarto-table-cell-role="th">E_H2S_TN</th>
+<th data-quarto-table-cell-role="th">E_HCL_TN</th>
+<th data-quarto-table-cell-role="th">E_HBR_TN</th>
+<th data-quarto-table-cell-role="th">E_HF_TN</th>
+<th data-quarto-table-cell-role="th">E_THC_TN</th>
+<th data-quarto-table-cell-role="th">E_ISOCYANATES_TN</th>
 <th data-quarto-table-cell-role="th">E_PM_TN</th>
+<th data-quarto-table-cell-role="th">E_ELEMENTAL CARBON_TN</th>
+<th data-quarto-table-cell-role="th">E_ORGANIC CARBON_TN</th>
+<th data-quarto-table-cell-role="th">E_PB_TN</th>
+<th data-quarto-table-cell-role="th">E_SB_TN</th>
+<th data-quarto-table-cell-role="th">E_CL_TN</th>
+<th data-quarto-table-cell-role="th">E_BR_TN</th>
 <th data-quarto-table-cell-role="th">E_TOG_TN</th>
+<th data-quarto-table-cell-role="th">E_BENZENE_TN</th>
+<th data-quarto-table-cell-role="th">E_CHLOROBENZENE_TN</th>
+<th data-quarto-table-cell-role="th">E_TOLUENE_TN</th>
+<th data-quarto-table-cell-role="th">E_ETHYLBENZENE_TN</th>
+<th data-quarto-table-cell-role="th">E_ETHYNYLBENZENE_TN</th>
+<th data-quarto-table-cell-role="th">E_STYRENE_TN</th>
+<th data-quarto-table-cell-role="th">E_ETHENE_TN</th>
+<th data-quarto-table-cell-role="th">E_PHENOL_TN</th>
+<th data-quarto-table-cell-role="th">E_PYRIDINE_TN</th>
+<th data-quarto-table-cell-role="th">E_BENZONITRILE_TN</th>
+<th data-quarto-table-cell-role="th">E_FORMALDEHYDE_TN</th>
+<th data-quarto-table-cell-role="th">E_ACETALDEHYDE_TN</th>
+<th data-quarto-table-cell-role="th">E_ACROLEIN_TN</th>
+<th data-quarto-table-cell-role="th">E_PAH_TN</th>
+<th data-quarto-table-cell-role="th">E_NAPHTHALENE_TN</th>
+<th data-quarto-table-cell-role="th">E_ACENAPHTHENE_TN</th>
+<th data-quarto-table-cell-role="th">E_ACENAPHTHYLENE_TN</th>
+<th data-quarto-table-cell-role="th">E_METHYLNAPHTHALENES_TN</th>
+<th data-quarto-table-cell-role="th">E_BIPHENYL_TN</th>
+<th data-quarto-table-cell-role="th">E_INDENE_TN</th>
+<th data-quarto-table-cell-role="th">E_FLUORENE_TN</th>
+<th data-quarto-table-cell-role="th">E_PHENANTHRENE_TN</th>
+<th data-quarto-table-cell-role="th">E_ANTHRACENE_TN</th>
+<th data-quarto-table-cell-role="th">E_FLUORANTHENE_TN</th>
+<th data-quarto-table-cell-role="th">E_PYRENE_TN</th>
+<th data-quarto-table-cell-role="th">E_BENZO(A)FLUORENE_TN</th>
+<th data-quarto-table-cell-role="th">E_BENZO(B)FLUORENE_TN</th>
+<th data-quarto-table-cell-role="th">E_BENZ(A)ANTHRACENE_TN</th>
+<th data-quarto-table-cell-role="th">E_CHRYSENE_TN</th>
+<th data-quarto-table-cell-role="th">E_BENZO(B)FLUORANTHENE_TN</th>
+<th data-quarto-table-cell-role="th">E_BENZO(K)FLUORANTHENE_TN</th>
+<th data-quarto-table-cell-role="th">E_BENZO(A)PYRENE_TN</th>
+<th data-quarto-table-cell-role="th">E_BENZO(E)PYRENE_TN</th>
+<th data-quarto-table-cell-role="th">E_PERYLENE_TN</th>
+<th data-quarto-table-cell-role="th">E_INDENO(1,2,3-C,D)PYRENE_TN</th>
+<th data-quarto-table-cell-role="th">E_BENZO(G,H,I,)PERYLENE_TN</th>
+<th data-quarto-table-cell-role="th">E_DIBENZO(A,H)ANTHRACENE_TN</th>
+<th data-quarto-table-cell-role="th">E_CORONENE_TN</th>
+<th data-quarto-table-cell-role="th">E_PCDD_TN</th>
+<th data-quarto-table-cell-role="th">E_PCDF_TN</th>
 <th data-quarto-table-cell-role="th">MONTH</th>
 <th data-quarto-table-cell-role="th">YEAR</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">456</td>
+<td data-quarto-table-cell-role="th">656</td>
 <td>Wagner</td>
 <td>CAMMU 016004</td>
 <td>2018-08-04</td>
@@ -704,20 +962,82 @@ Complete!</code></pre>
 <td>SFSS</td>
 <td>1458.000000</td>
 <td>MEDIAN</td>
-<td>...</td>
+<td>Mariposa</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>Mariposa</td>
+<td>22_MC_MPA</td>
+<td>0.95</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-9578.918 -33825.916)</td>
+<td>33.897</td>
 <td>1.765</td>
 <td>0.008</td>
+<td>0.013</td>
+<td>0.014</td>
+<td>0.038</td>
+<td>0.021</td>
 <td>0.002</td>
+<td>0.002</td>
+<td>0.056</td>
+<td>0.281</td>
+<td>0.008</td>
+<td>0.0</td>
+<td>1.489</td>
+<td>0.0</td>
 <td>1.005</td>
+<td>0.196</td>
+<td>0.045</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.091</td>
+<td>0.0</td>
 <td>0.073</td>
+<td>0.015</td>
+<td>0.008</td>
+<td>0.003</td>
+<td>0.001</td>
+<td>0.002</td>
+<td>0.002</td>
+<td>0.011</td>
+<td>0.001</td>
+<td>0.001</td>
+<td>0.001</td>
+<td>0.006</td>
+<td>0.005</td>
+<td>0.0</td>
+<td>0.002</td>
+<td>0.003</td>
+<td>0.0</td>
+<td>0.002</td>
+<td>0.001</td>
+<td>0.001</td>
+<td>0.001</td>
+<td>0.0</td>
+<td>0.002</td>
+<td>0.0</td>
+<td>0.001</td>
+<td>0.001</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>8</td>
 <td>2018</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1686</td>
+<td data-quarto-table-cell-role="th">1486</td>
 <td>Frazier</td>
 <td>CAFKU 007893</td>
 <td>2018-06-03</td>
@@ -728,7 +1048,11 @@ Complete!</code></pre>
 <td>SFSS</td>
 <td>1752.000000</td>
 <td>PARCEL</td>
-<td>...</td>
+<td>Fresno</td>
+<td>SAN JOAQUIN VALLEY</td>
+<td>San Joaquin Valley Unified</td>
+<td>10_SJV_SJU</td>
+<td>0.00</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (43612.19 -105244.953)</td>
@@ -737,11 +1061,69 @@ Complete!</code></pre>
 <td>0.000</td>
 <td>0.000</td>
 <td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>6</td>
 <td>2018</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">1704</td>
+<td data-quarto-table-cell-role="th">1504</td>
 <td>Omega</td>
 <td>CAAEU 021770</td>
 <td>2018-08-01</td>
@@ -752,7 +1134,11 @@ Complete!</code></pre>
 <td>SFSS</td>
 <td>1391.000000</td>
 <td>PARCEL</td>
-<td>...</td>
+<td>El Dorado</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>El Dorado</td>
+<td>9_MC_ED</td>
+<td>0.00</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-89600.032 90657.664)</td>
@@ -761,11 +1147,69 @@ Complete!</code></pre>
 <td>0.000</td>
 <td>0.000</td>
 <td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>8</td>
 <td>2018</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1705</td>
+<td data-quarto-table-cell-role="th">1505</td>
 <td>Omega</td>
 <td>CAAEU 021770</td>
 <td>2018-08-01</td>
@@ -776,7 +1220,11 @@ Complete!</code></pre>
 <td>SFSS</td>
 <td>1777.000000</td>
 <td>PARCEL</td>
-<td>...</td>
+<td>El Dorado</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>El Dorado</td>
+<td>9_MC_ED</td>
+<td>0.00</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-89674.345 90491.003)</td>
@@ -785,11 +1233,69 @@ Complete!</code></pre>
 <td>0.000</td>
 <td>0.000</td>
 <td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>8</td>
 <td>2018</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">1706</td>
+<td data-quarto-table-cell-role="th">1506</td>
 <td>Omega</td>
 <td>CAAEU 021770</td>
 <td>2018-08-01</td>
@@ -800,7 +1306,11 @@ Complete!</code></pre>
 <td>SFSS</td>
 <td>1666.421397</td>
 <td>MODEL_A</td>
-<td>...</td>
+<td>El Dorado</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>El Dorado</td>
+<td>9_MC_ED</td>
+<td>0.00</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-89807.299 90485.001)</td>
@@ -809,20 +1319,123 @@ Complete!</code></pre>
 <td>0.000</td>
 <td>0.000</td>
 <td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>8</td>
 <td>2018</td>
 </tr>
 </tbody>
 </table>
 
-<p>5 rows × 25 columns</p>
 </div>
 </div>
 </div>
-<p>As specified in “aggregate_fields”, the aggregate table is summarized by year, air district, and fire incident.</p>
-<div id="f76af87a" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>agg_table_auto</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="9">
+<section id="tip-for-filtering" class="level4">
+<h4 class="anchored" data-anchor-id="tip-for-filtering"><strong>TIP for filtering</strong></h4>
+<p>Since it is difficult to document every possible choice for each field value for each potential filter field (choices: [“Wildfire Name”, “Incident Number”, “County”, “Air Basin”, “Air District”, “CoAbDis Code”]), you can pull possible values from the current BSDB database.</p>
+<div id="a0e4170e" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We read in one of the classes from the package.</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sweep.get_bsdb <span class="im">import</span> GetBSDB</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># bsdb_df is the geodataframe of the BSDB.</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>bsdb_df <span class="op">=</span> GetBSDB(<span class="st">"use_default"</span>).bsdb_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c16ed656" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Air basins in the dataset:</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Air Basins: </span><span class="sc">{</span>bsdb_df[<span class="st">'BASIN_NAME'</span>]<span class="sc">.</span>unique()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Air districts in the dataset:</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Air Districts: </span><span class="sc">{</span>bsdb_df[<span class="st">'DIS_NAME'</span>]<span class="sc">.</span>unique()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># All filter field column names: ["incidentname", "incidentnum", "CO_NAME", "BASIN_NAME", "DIS_NAME", "COABDIS"]</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Note the argument filter_field uses the cleaned-up names: ["Wildfire Name", "Incident Number", "County", "Air Basin", "Air District", "CoAbDis Code"]</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Date field: ["clean_date"]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Air Basins: ['SOUTH COAST' 'SOUTH CENTRAL COAST' 'NORTH COAST'
+ 'SAN FRANCISCO BAY AREA' 'SAN DIEGO COUNTY' 'MOUNTAIN COUNTIES'
+ 'SACRAMENTO VALLEY' 'LAKE COUNTY' 'SAN JOAQUIN VALLEY'
+ 'NORTHEAST PLATEAU' 'MOJAVE DESERT' 'NORTH CENTRAL COAST'
+ 'GREAT BASIN VALLEYS' 'LAKE TAHOE' 'SALTON SEA' '']
+Air Districts: ['South Coast' 'Santa Barbara' 'Ventura' 'Northern Sonoma' 'Bay Area'
+ 'San Diego' 'San Luis Obispo' 'Mariposa' 'Butte' 'Lake' 'Yolo-Solano'
+ 'San Joaquin Valley Unified' 'Placer' 'El Dorado' 'Mendocino' 'Shasta'
+ 'Tehama' 'Lassen' 'North Coast Unified' 'Siskiyou' 'Amador' 'Calaveras'
+ 'Tuolumne' 'Antelope Valley' 'Monterey Bay Unified' 'Kern'
+ 'Northern Sierra' 'Feather River' 'Glenn' 'Sacramento Metro'
+ 'Great Basin Unified' '' 'Mojave Desert' 'Colusa']</code></pre>
+</div>
+</div>
+<p><strong>NOTE:</strong></p>
+<ul>
+<li>All filter field column names: [“incidentname”, “incidentnum”, “CO_NAME”, “BASIN_NAME”, “DIS_NAME”, “COABDIS”]</li>
+<li>The argument <strong>filter_field</strong> uses the cleaned-up names: [“Wildfire Name”, “Incident Number”, “County”, “Air Basin”, “Air District”, “CoAbDis Code”]</li>
+</ul>
+<p>Have fun!</p>
+</section>
+</section>
+<section id="outputs-1" class="level3">
+<h3 class="anchored" data-anchor-id="outputs-1">Outputs</h3>
+<p>The outputs are the same as for the interactive and spatial query types. As specified in “aggregate_fields”, the aggregate table is summarized by year, air district, and fire incident.</p>
+<div id="404b8e69" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>agg_table_auto</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
 <div>
 
 
@@ -833,11 +1446,69 @@ Complete!</code></pre>
 <th data-quarto-table-cell-role="th">AIR_DISTRICT</th>
 <th data-quarto-table-cell-role="th">YEAR</th>
 <th data-quarto-table-cell-role="th">INCIDENTNAME</th>
+<th data-quarto-table-cell-role="th">E_CO2_TN</th>
 <th data-quarto-table-cell-role="th">E_CO_TN</th>
 <th data-quarto-table-cell-role="th">E_NOX_TN</th>
+<th data-quarto-table-cell-role="th">E_NO_TN</th>
+<th data-quarto-table-cell-role="th">E_NO2 _TN</th>
+<th data-quarto-table-cell-role="th">E_HCN_TN</th>
+<th data-quarto-table-cell-role="th">E_NH3_TN</th>
+<th data-quarto-table-cell-role="th">E_SO2_TN</th>
 <th data-quarto-table-cell-role="th">E_SOX_TN</th>
+<th data-quarto-table-cell-role="th">E_H2S_TN</th>
+<th data-quarto-table-cell-role="th">E_HCL_TN</th>
+<th data-quarto-table-cell-role="th">E_HBR_TN</th>
+<th data-quarto-table-cell-role="th">E_HF_TN</th>
+<th data-quarto-table-cell-role="th">E_THC_TN</th>
+<th data-quarto-table-cell-role="th">E_ISOCYANATES_TN</th>
 <th data-quarto-table-cell-role="th">E_PM_TN</th>
+<th data-quarto-table-cell-role="th">E_ELEMENTAL CARBON_TN</th>
+<th data-quarto-table-cell-role="th">E_ORGANIC CARBON_TN</th>
+<th data-quarto-table-cell-role="th">E_PB_TN</th>
+<th data-quarto-table-cell-role="th">E_SB_TN</th>
+<th data-quarto-table-cell-role="th">E_CL_TN</th>
+<th data-quarto-table-cell-role="th">E_BR_TN</th>
 <th data-quarto-table-cell-role="th">E_TOG_TN</th>
+<th data-quarto-table-cell-role="th">E_BENZENE_TN</th>
+<th data-quarto-table-cell-role="th">E_CHLOROBENZENE_TN</th>
+<th data-quarto-table-cell-role="th">E_TOLUENE_TN</th>
+<th data-quarto-table-cell-role="th">E_ETHYLBENZENE_TN</th>
+<th data-quarto-table-cell-role="th">E_ETHYNYLBENZENE_TN</th>
+<th data-quarto-table-cell-role="th">E_STYRENE_TN</th>
+<th data-quarto-table-cell-role="th">E_ETHENE_TN</th>
+<th data-quarto-table-cell-role="th">E_PHENOL_TN</th>
+<th data-quarto-table-cell-role="th">E_PYRIDINE_TN</th>
+<th data-quarto-table-cell-role="th">E_BENZONITRILE_TN</th>
+<th data-quarto-table-cell-role="th">E_FORMALDEHYDE_TN</th>
+<th data-quarto-table-cell-role="th">E_ACETALDEHYDE_TN</th>
+<th data-quarto-table-cell-role="th">E_ACROLEIN_TN</th>
+<th data-quarto-table-cell-role="th">E_PAH_TN</th>
+<th data-quarto-table-cell-role="th">E_NAPHTHALENE_TN</th>
+<th data-quarto-table-cell-role="th">E_ACENAPHTHENE_TN</th>
+<th data-quarto-table-cell-role="th">E_ACENAPHTHYLENE_TN</th>
+<th data-quarto-table-cell-role="th">E_METHYLNAPHTHALENES_TN</th>
+<th data-quarto-table-cell-role="th">E_BIPHENYL_TN</th>
+<th data-quarto-table-cell-role="th">E_INDENE_TN</th>
+<th data-quarto-table-cell-role="th">E_FLUORENE_TN</th>
+<th data-quarto-table-cell-role="th">E_PHENANTHRENE_TN</th>
+<th data-quarto-table-cell-role="th">E_ANTHRACENE_TN</th>
+<th data-quarto-table-cell-role="th">E_FLUORANTHENE_TN</th>
+<th data-quarto-table-cell-role="th">E_PYRENE_TN</th>
+<th data-quarto-table-cell-role="th">E_BENZO(A)FLUORENE_TN</th>
+<th data-quarto-table-cell-role="th">E_BENZO(B)FLUORENE_TN</th>
+<th data-quarto-table-cell-role="th">E_BENZ(A)ANTHRACENE_TN</th>
+<th data-quarto-table-cell-role="th">E_CHRYSENE_TN</th>
+<th data-quarto-table-cell-role="th">E_BENZO(B)FLUORANTHENE_TN</th>
+<th data-quarto-table-cell-role="th">E_BENZO(K)FLUORANTHENE_TN</th>
+<th data-quarto-table-cell-role="th">E_BENZO(A)PYRENE_TN</th>
+<th data-quarto-table-cell-role="th">E_BENZO(E)PYRENE_TN</th>
+<th data-quarto-table-cell-role="th">E_PERYLENE_TN</th>
+<th data-quarto-table-cell-role="th">E_INDENO(1,2,3-C,D)PYRENE_TN</th>
+<th data-quarto-table-cell-role="th">E_BENZO(G,H,I,)PERYLENE_TN</th>
+<th data-quarto-table-cell-role="th">E_DIBENZO(A,H)ANTHRACENE_TN</th>
+<th data-quarto-table-cell-role="th">E_CORONENE_TN</th>
+<th data-quarto-table-cell-role="th">E_PCDD_TN</th>
+<th data-quarto-table-cell-role="th">E_PCDF_TN</th>
 <th data-quarto-table-cell-role="th">DAMAGED_STRUCTURES</th>
 </tr>
 </thead>
@@ -847,11 +1518,69 @@ Complete!</code></pre>
 <td>Amador</td>
 <td>2018</td>
 <td>Irish</td>
+<td>33.95</td>
 <td>1.77</td>
 <td>0.01</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>0.04</td>
+<td>0.02</td>
 <td>0.00</td>
+<td>0.00</td>
+<td>0.06</td>
+<td>0.28</td>
+<td>0.01</td>
+<td>0.0</td>
+<td>1.49</td>
+<td>0.0</td>
 <td>1.01</td>
+<td>0.20</td>
+<td>0.04</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.09</td>
+<td>0.0</td>
 <td>0.07</td>
+<td>0.02</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>1.0</td>
 </tr>
 <tr class="even">
@@ -859,11 +1588,69 @@ Complete!</code></pre>
 <td>Amador</td>
 <td>2019</td>
 <td>Willow</td>
+<td>33.90</td>
 <td>1.76</td>
 <td>0.01</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>0.04</td>
+<td>0.02</td>
 <td>0.00</td>
+<td>0.00</td>
+<td>0.06</td>
+<td>0.28</td>
+<td>0.01</td>
+<td>0.0</td>
+<td>1.49</td>
+<td>0.0</td>
 <td>1.00</td>
+<td>0.20</td>
+<td>0.04</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.09</td>
+<td>0.0</td>
 <td>0.07</td>
+<td>0.02</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>1.0</td>
 </tr>
 <tr class="odd">
@@ -871,11 +1658,69 @@ Complete!</code></pre>
 <td>Calaveras</td>
 <td>2018</td>
 <td>Horse</td>
+<td>64.95</td>
 <td>3.38</td>
 <td>0.02</td>
+<td>0.02</td>
+<td>0.03</td>
+<td>0.07</td>
+<td>0.04</td>
 <td>0.00</td>
+<td>0.00</td>
+<td>0.11</td>
+<td>0.54</td>
+<td>0.02</td>
+<td>0.0</td>
+<td>2.85</td>
+<td>0.0</td>
 <td>1.93</td>
+<td>0.38</td>
+<td>0.09</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.18</td>
+<td>0.0</td>
 <td>0.14</td>
+<td>0.03</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.02</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>2.0</td>
 </tr>
 <tr class="even">
@@ -883,11 +1728,69 @@ Complete!</code></pre>
 <td>Calaveras</td>
 <td>2018</td>
 <td>Waverly</td>
+<td>37.95</td>
 <td>1.98</td>
 <td>0.01</td>
+<td>0.01</td>
+<td>0.02</td>
+<td>0.04</td>
+<td>0.02</td>
 <td>0.00</td>
+<td>0.00</td>
+<td>0.06</td>
+<td>0.32</td>
+<td>0.01</td>
+<td>0.0</td>
+<td>1.67</td>
+<td>0.0</td>
 <td>1.13</td>
+<td>0.22</td>
+<td>0.05</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.10</td>
+<td>0.0</td>
 <td>0.08</td>
+<td>0.02</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>1.0</td>
 </tr>
 <tr class="odd">
@@ -895,11 +1798,69 @@ Complete!</code></pre>
 <td>El Dorado</td>
 <td>2018</td>
 <td>Meyers</td>
+<td>146.93</td>
 <td>7.65</td>
 <td>0.04</td>
+<td>0.06</td>
+<td>0.06</td>
+<td>0.17</td>
+<td>0.09</td>
 <td>0.01</td>
+<td>0.01</td>
+<td>0.24</td>
+<td>1.22</td>
+<td>0.04</td>
+<td>0.0</td>
+<td>6.46</td>
+<td>0.0</td>
 <td>4.36</td>
+<td>0.85</td>
+<td>0.20</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.39</td>
+<td>0.0</td>
 <td>0.32</td>
+<td>0.06</td>
+<td>0.03</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>0.05</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.03</td>
+<td>0.02</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>0.0</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>4.0</td>
 </tr>
 <tr class="even">
@@ -907,11 +1868,69 @@ Complete!</code></pre>
 <td>El Dorado</td>
 <td>2018</td>
 <td>Omega</td>
+<td>31.80</td>
 <td>1.66</td>
 <td>0.01</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>0.04</td>
+<td>0.02</td>
 <td>0.00</td>
+<td>0.00</td>
+<td>0.05</td>
+<td>0.26</td>
+<td>0.01</td>
+<td>0.0</td>
+<td>1.40</td>
+<td>0.0</td>
 <td>0.94</td>
+<td>0.18</td>
+<td>0.04</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.08</td>
+<td>0.0</td>
 <td>0.07</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>1.0</td>
 </tr>
 <tr class="odd">
@@ -919,11 +1938,69 @@ Complete!</code></pre>
 <td>El Dorado</td>
 <td>2019</td>
 <td>County</td>
+<td>55.87</td>
 <td>2.91</td>
 <td>0.01</td>
+<td>0.02</td>
+<td>0.02</td>
+<td>0.06</td>
+<td>0.04</td>
 <td>0.00</td>
+<td>0.00</td>
+<td>0.09</td>
+<td>0.46</td>
+<td>0.01</td>
+<td>0.0</td>
+<td>2.45</td>
+<td>0.0</td>
 <td>1.66</td>
+<td>0.32</td>
+<td>0.07</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.15</td>
+<td>0.0</td>
 <td>0.12</td>
+<td>0.02</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.02</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>2.0</td>
 </tr>
 <tr class="even">
@@ -931,11 +2008,69 @@ Complete!</code></pre>
 <td>El Dorado</td>
 <td>2019</td>
 <td>Rimrock</td>
+<td>33.90</td>
 <td>1.76</td>
 <td>0.01</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>0.04</td>
+<td>0.02</td>
 <td>0.00</td>
+<td>0.00</td>
+<td>0.06</td>
+<td>0.28</td>
+<td>0.01</td>
+<td>0.0</td>
+<td>1.49</td>
+<td>0.0</td>
 <td>1.00</td>
+<td>0.20</td>
+<td>0.04</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.09</td>
+<td>0.0</td>
 <td>0.07</td>
+<td>0.02</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>1.0</td>
 </tr>
 <tr class="odd">
@@ -943,11 +2078,69 @@ Complete!</code></pre>
 <td>El Dorado</td>
 <td>2020</td>
 <td>Cameron</td>
+<td>64.80</td>
 <td>3.37</td>
 <td>0.02</td>
+<td>0.02</td>
+<td>0.03</td>
+<td>0.07</td>
+<td>0.04</td>
 <td>0.00</td>
+<td>0.00</td>
+<td>0.11</td>
+<td>0.54</td>
+<td>0.02</td>
+<td>0.0</td>
+<td>2.85</td>
+<td>0.0</td>
 <td>1.92</td>
+<td>0.38</td>
+<td>0.09</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.17</td>
+<td>0.0</td>
 <td>0.14</td>
+<td>0.03</td>
+<td>0.02</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.02</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>2.0</td>
 </tr>
 <tr class="even">
@@ -955,11 +2148,69 @@ Complete!</code></pre>
 <td>Mariposa</td>
 <td>2018</td>
 <td>Wagner</td>
+<td>309.20</td>
 <td>16.10</td>
 <td>0.08</td>
+<td>0.12</td>
+<td>0.13</td>
+<td>0.35</td>
+<td>0.19</td>
 <td>0.02</td>
+<td>0.02</td>
+<td>0.51</td>
+<td>2.57</td>
+<td>0.08</td>
+<td>0.0</td>
+<td>13.58</td>
+<td>0.0</td>
 <td>9.17</td>
+<td>1.79</td>
+<td>0.41</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.83</td>
+<td>0.0</td>
 <td>0.67</td>
+<td>0.13</td>
+<td>0.07</td>
+<td>0.03</td>
+<td>0.01</td>
+<td>0.02</td>
+<td>0.02</td>
+<td>0.10</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>0.06</td>
+<td>0.04</td>
+<td>0.00</td>
+<td>0.02</td>
+<td>0.03</td>
+<td>0.0</td>
+<td>0.02</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.02</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>7.0</td>
 </tr>
 <tr class="odd">
@@ -967,11 +2218,69 @@ Complete!</code></pre>
 <td>Northern Sierra</td>
 <td>2020</td>
 <td>Jones</td>
+<td>663.40</td>
 <td>34.54</td>
 <td>0.16</td>
+<td>0.25</td>
+<td>0.28</td>
+<td>0.75</td>
+<td>0.41</td>
 <td>0.03</td>
+<td>0.03</td>
+<td>1.10</td>
+<td>5.50</td>
+<td>0.16</td>
+<td>0.0</td>
+<td>29.14</td>
+<td>0.0</td>
 <td>19.67</td>
+<td>3.84</td>
+<td>0.88</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>1.78</td>
+<td>0.0</td>
 <td>1.43</td>
+<td>0.29</td>
+<td>0.15</td>
+<td>0.06</td>
+<td>0.02</td>
+<td>0.04</td>
+<td>0.04</td>
+<td>0.22</td>
+<td>0.02</td>
+<td>0.02</td>
+<td>0.02</td>
+<td>0.12</td>
+<td>0.10</td>
+<td>0.00</td>
+<td>0.04</td>
+<td>0.06</td>
+<td>0.0</td>
+<td>0.04</td>
+<td>0.02</td>
+<td>0.02</td>
+<td>0.02</td>
+<td>0.00</td>
+<td>0.04</td>
+<td>0.00</td>
+<td>0.02</td>
+<td>0.02</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>18.0</td>
 </tr>
 <tr class="even">
@@ -979,11 +2288,69 @@ Complete!</code></pre>
 <td>Northern Sierra</td>
 <td>2020</td>
 <td>North Complex</td>
+<td>934.80</td>
 <td>48.68</td>
 <td>0.23</td>
+<td>0.36</td>
+<td>0.39</td>
+<td>1.06</td>
+<td>0.58</td>
 <td>0.05</td>
+<td>0.05</td>
+<td>1.55</td>
+<td>7.76</td>
+<td>0.22</td>
+<td>0.0</td>
+<td>41.06</td>
+<td>0.0</td>
 <td>27.72</td>
+<td>5.41</td>
+<td>1.24</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>2.51</td>
+<td>0.0</td>
 <td>2.02</td>
+<td>0.41</td>
+<td>0.21</td>
+<td>0.08</td>
+<td>0.03</td>
+<td>0.06</td>
+<td>0.06</td>
+<td>0.30</td>
+<td>0.03</td>
+<td>0.02</td>
+<td>0.03</td>
+<td>0.17</td>
+<td>0.14</td>
+<td>0.00</td>
+<td>0.05</td>
+<td>0.08</td>
+<td>0.0</td>
+<td>0.06</td>
+<td>0.03</td>
+<td>0.02</td>
+<td>0.03</td>
+<td>0.00</td>
+<td>0.06</td>
+<td>0.00</td>
+<td>0.03</td>
+<td>0.03</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>25.0</td>
 </tr>
 <tr class="odd">
@@ -991,11 +2358,69 @@ Complete!</code></pre>
 <td>San Joaquin Valley Unified</td>
 <td>2018</td>
 <td>Frazier</td>
+<td>33.90</td>
 <td>1.76</td>
 <td>0.01</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>0.04</td>
+<td>0.02</td>
 <td>0.00</td>
+<td>0.00</td>
+<td>0.06</td>
+<td>0.28</td>
+<td>0.01</td>
+<td>0.0</td>
+<td>1.49</td>
+<td>0.0</td>
 <td>1.00</td>
+<td>0.20</td>
+<td>0.04</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.09</td>
+<td>0.0</td>
 <td>0.07</td>
+<td>0.02</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>1.0</td>
 </tr>
 <tr class="even">
@@ -1003,11 +2428,69 @@ Complete!</code></pre>
 <td>San Joaquin Valley Unified</td>
 <td>2020</td>
 <td>Creek</td>
+<td>31600.97</td>
 <td>1645.57</td>
 <td>7.74</td>
+<td>11.99</td>
+<td>13.24</td>
+<td>35.71</td>
+<td>19.63</td>
 <td>1.57</td>
+<td>1.57</td>
+<td>52.22</td>
+<td>262.23</td>
+<td>7.62</td>
+<td>0.0</td>
+<td>1388.08</td>
+<td>0.0</td>
 <td>937.18</td>
+<td>183.01</td>
+<td>41.98</td>
+<td>0.06</td>
+<td>0.0</td>
+<td>84.84</td>
+<td>0.0</td>
 <td>68.16</td>
+<td>13.70</td>
+<td>7.19</td>
+<td>2.80</td>
+<td>1.20</td>
+<td>1.82</td>
+<td>2.13</td>
+<td>10.31</td>
+<td>0.86</td>
+<td>0.84</td>
+<td>1.18</td>
+<td>5.83</td>
+<td>4.61</td>
+<td>0.17</td>
+<td>1.74</td>
+<td>2.66</td>
+<td>0.0</td>
+<td>1.98</td>
+<td>0.86</td>
+<td>0.83</td>
+<td>0.96</td>
+<td>0.20</td>
+<td>2.08</td>
+<td>0.06</td>
+<td>0.86</td>
+<td>0.86</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.01</td>
+<td>0.04</td>
+<td>0.15</td>
+<td>0.0</td>
+<td>0.01</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.04</td>
+<td>0.04</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>871.0</td>
 </tr>
 <tr class="odd">
@@ -1015,11 +2498,69 @@ Complete!</code></pre>
 <td>San Joaquin Valley Unified</td>
 <td>2020</td>
 <td>SCU Lightning Cmplx</td>
+<td>1647.28</td>
 <td>85.78</td>
 <td>0.40</td>
+<td>0.63</td>
+<td>0.69</td>
+<td>1.86</td>
+<td>1.02</td>
 <td>0.09</td>
+<td>0.09</td>
+<td>2.72</td>
+<td>13.66</td>
+<td>0.39</td>
+<td>0.0</td>
+<td>72.36</td>
+<td>0.0</td>
 <td>48.85</td>
+<td>9.53</td>
+<td>2.19</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>4.42</td>
+<td>0.0</td>
 <td>3.55</td>
+<td>0.72</td>
+<td>0.38</td>
+<td>0.15</td>
+<td>0.06</td>
+<td>0.09</td>
+<td>0.10</td>
+<td>0.54</td>
+<td>0.05</td>
+<td>0.04</td>
+<td>0.06</td>
+<td>0.30</td>
+<td>0.24</td>
+<td>0.00</td>
+<td>0.09</td>
+<td>0.14</td>
+<td>0.0</td>
+<td>0.10</td>
+<td>0.05</td>
+<td>0.04</td>
+<td>0.05</td>
+<td>0.00</td>
+<td>0.10</td>
+<td>0.00</td>
+<td>0.05</td>
+<td>0.05</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>52.0</td>
 </tr>
 <tr class="even">
@@ -1027,11 +2568,69 @@ Complete!</code></pre>
 <td>San Joaquin Valley Unified</td>
 <td>2020</td>
 <td>SQF Complex</td>
+<td>9037.80</td>
 <td>470.61</td>
 <td>2.21</td>
+<td>3.44</td>
+<td>3.77</td>
+<td>10.23</td>
+<td>5.63</td>
 <td>0.42</td>
+<td>0.42</td>
+<td>14.93</td>
+<td>74.98</td>
+<td>2.19</td>
+<td>0.0</td>
+<td>396.98</td>
+<td>0.0</td>
 <td>268.04</td>
+<td>52.33</td>
+<td>12.01</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>24.24</td>
+<td>0.0</td>
 <td>19.52</td>
+<td>3.95</td>
+<td>2.07</td>
+<td>0.82</td>
+<td>0.33</td>
+<td>0.52</td>
+<td>0.63</td>
+<td>2.93</td>
+<td>0.22</td>
+<td>0.21</td>
+<td>0.33</td>
+<td>1.67</td>
+<td>1.35</td>
+<td>0.09</td>
+<td>0.51</td>
+<td>0.73</td>
+<td>0.0</td>
+<td>0.54</td>
+<td>0.22</td>
+<td>0.21</td>
+<td>0.30</td>
+<td>0.09</td>
+<td>0.63</td>
+<td>0.00</td>
+<td>0.22</td>
+<td>0.22</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.08</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>233.0</td>
 </tr>
 <tr class="odd">
@@ -1039,11 +2638,69 @@ Complete!</code></pre>
 <td>Tuolumne</td>
 <td>2018</td>
 <td>Ruby</td>
+<td>31.43</td>
 <td>1.64</td>
 <td>0.01</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>0.04</td>
+<td>0.02</td>
 <td>0.00</td>
+<td>0.00</td>
+<td>0.05</td>
+<td>0.26</td>
+<td>0.01</td>
+<td>0.0</td>
+<td>1.38</td>
+<td>0.0</td>
 <td>0.93</td>
+<td>0.18</td>
+<td>0.04</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.08</td>
+<td>0.0</td>
 <td>0.07</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>1.0</td>
 </tr>
 </tbody>
@@ -1054,152 +2711,101 @@ Complete!</code></pre>
 </div>
 </section>
 </section>
+</section>
 <section id="emissions-predictor" class="level1">
 <h1>Emissions Predictor</h1>
-<div id="3af2292a" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sweep.predictor_main <span class="im">import</span> sweep_predictor</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>load_dotenv() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="10">
+<p><strong>NOTE</strong>: A Lightbox Parcel API key is REQUIRED to use the emissions predictor.</p>
+<p>The predictor uses parcel square footage data (where available) to estimate potential emissions within a user-provided polygon or set of polygons. The analysis is limited to parcels where square footage data is available. Users provide a percentage of structures within the polygon to assume “destroyed” by wildfire. As with the estimator, users provide emissions estimation parameters (or use the default), and the tool returns points and excel files with the requested estimates.</p>
+<div id="0e2d1db1" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sweep.predictor_main <span class="im">import</span> sweep_predictor</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>load_dotenv() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>True</code></pre>
 </div>
 </div>
-<p>The AOI is the polygon shape or shapes in which emissions will be estimated. In the Predictor function, this is aoi_source, and it can be either a geopandas geodataframe, or a path to a geopackage or shapefile.</p>
-<p>The aoi_source will have each row or feature indexed seperately, with all columns retained in the final products.</p>
-<div id="dba71179" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Recycling! We'll use the same aoi as the spatial query above.</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>aoi.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="read-in-or-point-to-an-aoi-1" class="level3">
+<h3 class="anchored" data-anchor-id="read-in-or-point-to-an-aoi-1">Read in or point to an AOI</h3>
+<p>The AOI is the polygon shape or shapes in which emissions will be estimated. In the Predictor function, this is <strong>aoi_source</strong>, and like polygon_input in sweep_estimator, it can be either a geopandas geodataframe, or a path to a geopackage or shapefile.</p>
+<p>The aoi_source will be reprojected if needed and have each row or feature indexed seperately, with all columns retained in the final products.</p>
+<div id="31adeac3" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Recycling! We'll use the same aoi as the spatial query above.</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>aoi.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/cell-12-output-1.png" width="547" height="411" class="figure-img"></p>
+<p><img src="index_files/figure-html/cell-15-output-1.png" width="547" height="411" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Key differences related to the predictor are: - aoi_source: a geodataframe or shapeflie/geopackage path is required. - api_key: the need for a LightBox API key - ratio_destroyed: users must specify the ratio of structures to designate “destroyed” by fire.</p>
-<div id="1f868a13" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>predicted_emissions_gdf, agg_table, vehicle_table <span class="op">=</span> sweep_predictor(</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    aoi_source <span class="op">=</span> aoi,</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># You need a lightbox API key to get the parcel data.</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    api_key <span class="op">=</span> os.getenv(<span class="st">'LB_API_KEY'</span>),</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    ratio_destroyed <span class="op">=</span> <span class="fl">0.8</span>,</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    pollutants <span class="op">=</span> <span class="va">None</span>, </span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    aggregate_fields <span class="op">=</span> [<span class="st">'AIR DISTRICT'</span>, <span class="st">'AOI_INDEX'</span>],</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    write <span class="op">=</span> <span class="st">"No"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="run-sweep_predictor" class="level3">
+<h3 class="anchored" data-anchor-id="run-sweep_predictor">Run sweep_predictor</h3>
+<p>Key differences related to the predictor are:</p>
+<ul>
+<li><strong>aoi_source</strong>: a geodataframe or shapeflie/geopackage path is required.</li>
+<li><strong>api_key</strong>: the need for a LightBox API key</li>
+<li><strong>ratio_destroyed</strong>: users must specify the ratio of structures to designate “destroyed” by fire.</li>
+</ul>
+<div id="278416c8" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>predicted_emissions_gdf, agg_table, vehicle_table <span class="op">=</span> sweep_predictor(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    aoi_source <span class="op">=</span> aoi,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># You need a lightbox API key to get the parcel data.</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    api_key <span class="op">=</span> os.getenv(<span class="st">'LB_API_KEY'</span>),</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    ratio_destroyed <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    pollutants <span class="op">=</span> <span class="va">None</span>, </span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    aggregate_fields <span class="op">=</span> [<span class="st">'AIR DISTRICT'</span>, <span class="st">'AOI_INDEX'</span>],</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    write <span class="op">=</span> <span class="st">"No"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Fetching parcel data...
-Offset: 0, Limit: 500
-Request URL: https://api.lightboxre.com/v1/parcels/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=0
-Status code: 200
-Offset: 500, Limit: 500
-Request URL: https://api.lightboxre.com/v1/parcels/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=500
-Status code: 200
-Offset: 1000, Limit: 500
-Request URL: https://api.lightboxre.com/v1/parcels/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=1000
-Status code: 200
-Offset: 1500, Limit: 500
-Request URL: https://api.lightboxre.com/v1/parcels/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=1500
-Status code: 200
-Offset: 2000, Limit: 500
-Request URL: https://api.lightboxre.com/v1/parcels/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=2000
-Status code: 200
-Offset: 2500, Limit: 500
-Request URL: https://api.lightboxre.com/v1/parcels/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=2500
-Status code: 200
-Offset: 3000, Limit: 500
-Request URL: https://api.lightboxre.com/v1/parcels/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=3000
-Status code: 200
-Offset: 0, Limit: 500
-Request URL: https://api.lightboxre.com/v1/parcels/us/geometry?wkt=POLYGON+%28%28-120.9628979569999387+39.0844010470000285%2C+-120.9628979569999387+39.1481078390000334%2C+-120.9954806439999402+39.1481078390000334%2C+-120.9954806439999402+39.0844010470000285%2C+-120.9628979569999387+39.0844010470000285%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=0
-Status code: 200
-Offset: 500, Limit: 500
-Request URL: https://api.lightboxre.com/v1/parcels/us/geometry?wkt=POLYGON+%28%28-120.9628979569999387+39.0844010470000285%2C+-120.9628979569999387+39.1481078390000334%2C+-120.9954806439999402+39.1481078390000334%2C+-120.9954806439999402+39.0844010470000285%2C+-120.9628979569999387+39.0844010470000285%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=500
-Status code: 200
-Offset: 0, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=0
-Status code: 200
-Offset: 500, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=500
-Status code: 200
-Offset: 1000, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=1000
-Status code: 200
-Offset: 1500, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=1500
-Status code: 200
-Offset: 2000, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=2000
-Status code: 200
-Offset: 2500, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=2500
-Status code: 200
-Offset: 3000, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=3000
-Status code: 200
-Offset: 3500, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=3500
-Status code: 200
-Offset: 4000, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=4000
-Status code: 200
-Offset: 4500, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=4500
-Status code: 200
-Offset: 5000, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=5000
-Status code: 200
-Offset: 5500, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=5500
-Status code: 200
-Offset: 6000, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=6000
-Status code: 200
-Offset: 6500, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=6500
-Status code: 200
-Offset: 7000, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=7000
-Status code: 200
-Offset: 7500, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=7500
-Status code: 200
-Offset: 8000, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=8000
-Status code: 200
-Offset: 8500, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=8500
-Status code: 200
-Offset: 9000, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=9000
-Status code: 200
-Offset: 9500, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=9500
-Status code: 200
-Offset: 10000, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.5370150449999755+38.9046662170000559%2C+-120.5370150449999755+39.1784855260000313%2C+-120.8459057469999607+39.1784855260000313%2C+-120.8459057469999607+38.9046662170000559%2C+-120.5370150449999755+38.9046662170000559%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=10000
-Status code: 200
-Offset: 0, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.9628979569999387+39.0844010470000285%2C+-120.9628979569999387+39.1481078390000334%2C+-120.9954806439999402+39.1481078390000334%2C+-120.9954806439999402+39.0844010470000285%2C+-120.9628979569999387+39.0844010470000285%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=0
-Status code: 200
-Offset: 500, Limit: 500
-Request URL: https://api.lightboxre.com/v1/assessments/us/geometry?wkt=POLYGON+%28%28-120.9628979569999387+39.0844010470000285%2C+-120.9628979569999387+39.1481078390000334%2C+-120.9954806439999402+39.1481078390000334%2C+-120.9954806439999402+39.0844010470000285%2C+-120.9628979569999387+39.0844010470000285%29%29&amp;bufferDistance=0&amp;bufferUnit=m&amp;limit=500&amp;offset=500
-Status code: 200
+https://api.lightboxre.com/v1/parcels/us/geometry
+Offset: 0, Limit: 500, Status code: 200
+Offset: 500, Limit: 500, Status code: 200
+Offset: 1000, Limit: 500, Status code: 200
+Offset: 1500, Limit: 500, Status code: 200
+Offset: 2000, Limit: 500, Status code: 200
+Offset: 2500, Limit: 500, Status code: 200
+Offset: 3000, Limit: 500, Status code: 200
+https://api.lightboxre.com/v1/parcels/us/geometry
+Offset: 0, Limit: 500, Status code: 200
+Offset: 500, Limit: 500, Status code: 200
+https://api.lightboxre.com/v1/assessments/us/geometry
+Offset: 0, Limit: 500, Status code: 200
+Offset: 500, Limit: 500, Status code: 200
+Offset: 1000, Limit: 500, Status code: 200
+Offset: 1500, Limit: 500, Status code: 200
+Offset: 2000, Limit: 500, Status code: 200
+Offset: 2500, Limit: 500, Status code: 200
+Offset: 3000, Limit: 500, Status code: 200
+Offset: 3500, Limit: 500, Status code: 200
+Offset: 4000, Limit: 500, Status code: 200
+Offset: 4500, Limit: 500, Status code: 200
+Offset: 5000, Limit: 500, Status code: 200
+Offset: 5500, Limit: 500, Status code: 200
+Offset: 6000, Limit: 500, Status code: 200
+Offset: 6500, Limit: 500, Status code: 200
+Offset: 7000, Limit: 500, Status code: 200
+Offset: 7500, Limit: 500, Status code: 200
+Offset: 8000, Limit: 500, Status code: 200
+Offset: 8500, Limit: 500, Status code: 200
+Offset: 9000, Limit: 500, Status code: 200
+Offset: 9500, Limit: 500, Status code: 200
+Offset: 10000, Limit: 500, Status code: 200
+https://api.lightboxre.com/v1/assessments/us/geometry
+Offset: 0, Limit: 500, Status code: 200
+Offset: 500, Limit: 500, Status code: 200
 Processing parcels...
 Parcel and assessment datasets joined and fields cleaned.
 Joined dataset clipped to fire geometry.
 Generating synthetic BSDB...
-Missing columns: {'centroid', 'STREETNUMBER', 'CITY', 'PARCEL_CAT_MATCH', 'SITE_HOUSE_NUMBER', 'ZIPCODE', 'INCIDENTSTARTDATE', 'STATE', 'DAMAGE', 'STRUCTURETYPE', 'OBJECTID', 'FEMA_PMFT', 'INCIDENTNUM', 'YEARBUILT', 'APN', 'SITEADDRESS', 'UNITS_NUMBER', 'SITE_DIRECTION', 'STREETTYPE', 'STREETNAME', 'SQFEET', 'TOTAL_ROOMS', 'FEMA_SQFT', 'HAZARDTYPE', 'geometry', 'CALFIREUNIT', 'COMMUNITY', 'GLOBALID', 'BEDROOMS', 'STRUCTURECATEGORY', 'SITE_UNIT_NUMBER', 'TOTAL_BATHS', 'CO_NAME', 'SITE_UNIT_PREFIX', 'STREETSUFFIX', 'ZONING'}
+Missing columns: {'OBJECTID', 'centroid', 'SITE_HOUSE_NUMBER', 'COMMUNITY', 'INCIDENTSTARTDATE', 'ZONING', 'STREETNAME', 'TOTAL_ROOMS', 'TOTAL_BATHS', 'geometry', 'STREETSUFFIX', 'ZIPCODE', 'INCIDENTNUM', 'CITY', 'BEDROOMS', 'SITE_UNIT_PREFIX', 'STATE', 'UNITS_NUMBER', 'STRUCTURECATEGORY', 'SQFEET', 'FEMA_SQFT', 'PARCEL_CAT_MATCH', 'STRUCTURETYPE', 'DAMAGE', 'GLOBALID', 'FEMA_PMFT', 'STREETNUMBER', 'HAZARDTYPE', 'SITEADDRESS', 'CO_NAME', 'STREETTYPE', 'YEARBUILT', 'SITE_UNIT_NUMBER', 'APN', 'CALFIREUNIT', 'SITE_DIRECTION'}
 Estimating emissions for pollutants: ['CO', 'NOx', 'SOx', 'PM', 'TOG']...
-C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors
 Holder efs from: C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors\Holder_EFs.xlsx
 Requested pollutants: ['CO', 'NOx', 'SOx', 'PM', 'TOG']
 Returned pollutants: ['CO' 'NOx' 'SOx' 'PM' 'TOG']
 Aggregating report by: ['AIR DISTRICT', 'AOI_INDEX']...
-Aggregating on: ['AIR DISTRICT', 'AOI_INDEX']
 Calculating vehicle emissions with CARB factors...
-150
 Ratio provided: 216.0 vehicles estimated using ratio: 1.44
 CARB efs from: C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors\CARB_EFs.xlsx
 Requested pollutants: ['CO', 'NOx', 'SOx', 'PM']
@@ -1207,14 +2813,21 @@ Returned pollutants: ['CO' 'NOx' 'SOx' 'PM']
 Processing complete.</code></pre>
 </div>
 </div>
-<p>In the returned dataframes, columns from the aoi_source are retained and tagged with “AOI” at the start of the column. predicted_emissions_gdf is a geodataframe of each record used to estimate emissions. Each “structure” is derived from the parcels that fell within the AOI.</p>
-<div id="313d73d7" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(predicted_emissions_gdf.crs)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>predicted_emissions_gdf.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="outputs-2" class="level3">
+<h3 class="anchored" data-anchor-id="outputs-2">Outputs</h3>
+<ul>
+<li>In the returned dataframes, columns from the <strong>aoi_source</strong> are retained and tagged with “AOI” at the start of the column.</li>
+<li><strong>predicted_emissions_gdf</strong> is a geodataframe of each record used to estimate emissions.</li>
+<li>Each “structure” is derived from the parcels that fell within the AOI.</li>
+</ul>
+<div id="a6e001c8" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(predicted_emissions_gdf.crs)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>predicted_emissions_gdf.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>EPSG:3310</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="13">
+<div class="cell-output cell-output-display" data-execution_count="16">
 <div>
 
 
@@ -1232,7 +2845,12 @@ Processing complete.</code></pre>
 <th data-quarto-table-cell-role="th">START_DATE</th>
 <th data-quarto-table-cell-role="th">DAMAGE</th>
 <th data-quarto-table-cell-role="th">CAT</th>
-<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">SQFT</th>
+<th data-quarto-table-cell-role="th">SQFT_SOURCE</th>
+<th data-quarto-table-cell-role="th">COUNTY</th>
+<th data-quarto-table-cell-role="th">AIR_BASIN</th>
+<th data-quarto-table-cell-role="th">AIR_DISTRICT</th>
+<th data-quarto-table-cell-role="th">CONSUMPTION_FACTOR</th>
 <th data-quarto-table-cell-role="th">FRAME_FACTOR</th>
 <th data-quarto-table-cell-role="th">CONTENTS_FACTOR</th>
 <th data-quarto-table-cell-role="th">geometry</th>
@@ -1254,11 +2872,16 @@ Processing complete.</code></pre>
 <td>2022-09-06</td>
 <td>Mosquito_CATNF 001371_2022-09-06</td>
 <td>FRAP</td>
-<td>SWEEP202506111234</td>
-<td>2025-06-11</td>
+<td>SWEEP202506212215</td>
+<td>2025-06-21</td>
 <td>Destroyed (&gt;50%)</td>
 <td>SR</td>
-<td>...</td>
+<td>145.724907</td>
+<td>PARCEL</td>
+<td>PLACER</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>Placer</td>
+<td>0.95</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-72862.95 110016.358)</td>
@@ -1278,11 +2901,16 @@ Processing complete.</code></pre>
 <td>2022-09-06</td>
 <td>Mosquito_CATNF 001371_2022-09-06</td>
 <td>FRAP</td>
-<td>SWEEP202506111234</td>
-<td>2025-06-11</td>
+<td>SWEEP202506212215</td>
+<td>2025-06-21</td>
 <td>Destroyed (&gt;50%)</td>
 <td>MR</td>
-<td>...</td>
+<td>171.747212</td>
+<td>PARCEL</td>
+<td>PLACER</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>Placer</td>
+<td>0.95</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-72675.094 110682.073)</td>
@@ -1302,11 +2930,16 @@ Processing complete.</code></pre>
 <td>2022-09-06</td>
 <td>Mosquito_CATNF 001371_2022-09-06</td>
 <td>FRAP</td>
-<td>SWEEP202506111234</td>
-<td>2025-06-11</td>
+<td>SWEEP202506212215</td>
+<td>2025-06-21</td>
 <td>Destroyed (&gt;50%)</td>
 <td>SR</td>
-<td>...</td>
+<td>79.925651</td>
+<td>PARCEL</td>
+<td>PLACER</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>Placer</td>
+<td>0.95</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-72964.532 109973.298)</td>
@@ -1326,11 +2959,16 @@ Processing complete.</code></pre>
 <td>2022-09-06</td>
 <td>Mosquito_CATNF 001371_2022-09-06</td>
 <td>FRAP</td>
-<td>SWEEP202506111234</td>
-<td>2025-06-11</td>
+<td>SWEEP202506212215</td>
+<td>2025-06-21</td>
 <td>Destroyed (&gt;50%)</td>
 <td>MR</td>
-<td>...</td>
+<td>98.884758</td>
+<td>PARCEL</td>
+<td>PLACER</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>Placer</td>
+<td>0.95</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-73128.236 110051.244)</td>
@@ -1350,11 +2988,16 @@ Processing complete.</code></pre>
 <td>2022-09-06</td>
 <td>Mosquito_CATNF 001371_2022-09-06</td>
 <td>FRAP</td>
-<td>SWEEP202506111234</td>
-<td>2025-06-11</td>
+<td>SWEEP202506212215</td>
+<td>2025-06-21</td>
 <td>Destroyed (&gt;50%)</td>
 <td>COM</td>
-<td>...</td>
+<td>1477.881041</td>
+<td>PARCEL</td>
+<td>PLACER</td>
+<td>MOUNTAIN COUNTIES</td>
+<td>Placer</td>
+<td>0.95</td>
 <td>31.07</td>
 <td>5.87</td>
 <td>POINT (-72557.727 111000.702)</td>
@@ -1369,38 +3012,13 @@ Processing complete.</code></pre>
 </tbody>
 </table>
 
-<p>5 rows × 26 columns</p>
-</div>
-</div>
-</div>
-<div id="21f8709f" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read AOI layer</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>aoi_gdf <span class="op">=</span> aoi.to_crs(predicted_emissions_gdf.crs)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">8</span>))</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>aoi_gdf.plot(ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">'none'</span>, edgecolor<span class="op">=</span><span class="st">'lightgray'</span>, linewidth<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>sizes <span class="op">=</span> predicted_emissions_gdf[<span class="st">"E_CO_TN"</span>].fillna(<span class="dv">0</span>) <span class="op">*</span> <span class="dv">5</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>predicted_emissions_gdf.plot(</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>ax,</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">'orange'</span>,</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">=</span><span class="fl">0.6</span>,</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    markersize<span class="op">=</span>sizes</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Emissions Map (CO in Tons)"</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="14">
-<pre><code>Text(0.5, 1.0, 'Emissions Map (CO in Tons)')</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="index_files/figure-html/cell-15-output-2.png" width="547" height="408" class="figure-img"></p>
-</figure>
 </div>
 </div>
 </div>
 <p>In this demo run, we provided “AIR DISTRICT” and “AOI_INDEX” as the aggregation fields. As you can see our results are split by AOI_INDEX (the polygon) and AIR_DISTRICT. We get total emissions for each polygon in each air district.</p>
-<div id="31d452c7" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>agg_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="15">
+<div id="3a0491a9" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>agg_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
 <div>
 
 
@@ -1423,21 +3041,21 @@ Processing complete.</code></pre>
 <td data-quarto-table-cell-role="th">0</td>
 <td>El Dorado</td>
 <td>0</td>
-<td>1.42</td>
+<td>1.69</td>
 <td>0.01</td>
 <td>0.0</td>
-<td>0.81</td>
-<td>0.06</td>
-<td>7</td>
+<td>0.96</td>
+<td>0.07</td>
+<td>10</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
 <td>Northern Sierra</td>
 <td>1</td>
-<td>9.93</td>
+<td>9.85</td>
 <td>0.05</td>
 <td>0.0</td>
-<td>5.66</td>
+<td>5.61</td>
 <td>0.41</td>
 <td>47</td>
 </tr>
@@ -1445,10 +3063,10 @@ Processing complete.</code></pre>
 <td data-quarto-table-cell-role="th">2</td>
 <td>Placer</td>
 <td>0</td>
-<td>13.17</td>
+<td>13.07</td>
 <td>0.07</td>
 <td>0.0</td>
-<td>7.50</td>
+<td>7.44</td>
 <td>0.54</td>
 <td>60</td>
 </tr>
@@ -1456,12 +3074,12 @@ Processing complete.</code></pre>
 <td data-quarto-table-cell-role="th">3</td>
 <td>Placer</td>
 <td>1</td>
-<td>6.39</td>
+<td>6.02</td>
 <td>0.03</td>
 <td>0.0</td>
-<td>3.64</td>
-<td>0.27</td>
-<td>28</td>
+<td>3.43</td>
+<td>0.25</td>
+<td>27</td>
 </tr>
 </tbody>
 </table>
@@ -1470,12 +3088,12 @@ Processing complete.</code></pre>
 </div>
 </div>
 <p>We can again add the full AOI information back in to each AOI polygon based on the index.</p>
-<div id="df530462" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>aoi_cols <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> predicted_emissions_gdf.columns <span class="cf">if</span> col.startswith(<span class="st">"AOI_"</span>)]</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>unique_aoi <span class="op">=</span> predicted_emissions_gdf[aoi_cols].drop_duplicates()</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>agg_table_aoi <span class="op">=</span> agg_table.merge(unique_aoi, on<span class="op">=</span><span class="st">"AOI_INDEX"</span>, how<span class="op">=</span><span class="st">"left"</span>)</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>agg_table_aoi</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="16">
+<div id="e784aca7" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>aoi_cols <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> predicted_emissions_gdf.columns <span class="cf">if</span> col.startswith(<span class="st">"AOI_"</span>)]</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>unique_aoi <span class="op">=</span> predicted_emissions_gdf[aoi_cols].drop_duplicates()</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>agg_table_aoi <span class="op">=</span> agg_table.merge(unique_aoi, on<span class="op">=</span><span class="st">"AOI_INDEX"</span>, how<span class="op">=</span><span class="st">"left"</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>agg_table_aoi</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
 <div>
 
 
@@ -1503,12 +3121,12 @@ Processing complete.</code></pre>
 <td data-quarto-table-cell-role="th">0</td>
 <td>El Dorado</td>
 <td>0</td>
-<td>1.42</td>
+<td>1.69</td>
 <td>0.01</td>
 <td>0.0</td>
-<td>0.81</td>
-<td>0.06</td>
-<td>7</td>
+<td>0.96</td>
+<td>0.07</td>
+<td>10</td>
 <td>Mosquito</td>
 <td>CATNF 001371</td>
 <td>2022-09-06</td>
@@ -1519,10 +3137,10 @@ Processing complete.</code></pre>
 <td data-quarto-table-cell-role="th">1</td>
 <td>Northern Sierra</td>
 <td>1</td>
-<td>9.93</td>
+<td>9.85</td>
 <td>0.05</td>
 <td>0.0</td>
-<td>5.66</td>
+<td>5.61</td>
 <td>0.41</td>
 <td>47</td>
 <td>River</td>
@@ -1535,10 +3153,10 @@ Processing complete.</code></pre>
 <td data-quarto-table-cell-role="th">2</td>
 <td>Placer</td>
 <td>0</td>
-<td>13.17</td>
+<td>13.07</td>
 <td>0.07</td>
 <td>0.0</td>
-<td>7.50</td>
+<td>7.44</td>
 <td>0.54</td>
 <td>60</td>
 <td>Mosquito</td>
@@ -1551,12 +3169,12 @@ Processing complete.</code></pre>
 <td data-quarto-table-cell-role="th">3</td>
 <td>Placer</td>
 <td>1</td>
-<td>6.39</td>
+<td>6.02</td>
 <td>0.03</td>
 <td>0.0</td>
-<td>3.64</td>
-<td>0.27</td>
-<td>28</td>
+<td>3.43</td>
+<td>0.25</td>
+<td>27</td>
 <td>River</td>
 <td>CANEU 020628</td>
 <td>2021-08-04</td>
@@ -1569,8 +3187,42 @@ Processing complete.</code></pre>
 </div>
 </div>
 </div>
+<p>We can also remake our map with the predictor’s output instead of reported estimator data.</p>
+<ul>
+<li>The predictor has a few main drawbacks.</li>
+<li>First, it likely underestimates the count of structures, as parcel data generally reflects the main structure in a parcel. The full DINS dataset also includes minor utility structures, mobile homes, and other types of structures.</li>
+<li>Second, not all structures in a fire footprint are destroyed. The predictor’s <strong>ratio_destroyed</strong> provides users the ability to state the percentage of structures in the AOI destroyed, but it is effectively a placeholder for the data collected on the ground for the DINS dataset.</li>
+</ul>
+<section id="map" class="level4">
+<h4 class="anchored" data-anchor-id="map">Map</h4>
+<div id="7ecb68b9" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read AOI layer</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>aoi_gdf <span class="op">=</span> aoi.to_crs(predicted_emissions_gdf.crs)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">8</span>))</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>aoi_gdf.plot(ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">'none'</span>, edgecolor<span class="op">=</span><span class="st">'lightgray'</span>, linewidth<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>sizes <span class="op">=</span> predicted_emissions_gdf[<span class="st">"E_CO_TN"</span>].fillna(<span class="dv">0</span>) <span class="op">*</span> <span class="dv">5</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>predicted_emissions_gdf.plot(</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>ax,</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">'orange'</span>,</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">=</span><span class="fl">0.6</span>,</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>    markersize<span class="op">=</span>sizes</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Emissions Map (CO in Tons)"</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>Text(0.5, 1.0, 'Emissions Map (CO in Tons)')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-20-output-2.png" width="547" height="408" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
 
 
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->

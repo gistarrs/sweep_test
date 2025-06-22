@@ -1,5 +1,5 @@
 ---
-title: "SWEEP Demo"
+title: "Structure Wildfire Emissions Estimator and Predictor Demo"
 format:
   html:
     toc: true
@@ -9,6 +9,7 @@ jupyter: python3
 # Load dependencies
 ```{python}
 import os
+import pandas as pd
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
@@ -17,23 +18,52 @@ import matplotlib.colors as colors
 from sweep import config
 from sweep.estimator_main import sweep_estimator
 print("Imports complete!")
+
+# We'll set this option so it doesn't abbreviate dataframes.
+pd.set_option('display.max_columns', None)
 ```
 
 # Emissions Estimator
-The Estimator uses data from CAL FIRE's damage inspection database to identify structures damaged by wildfire.
-It uses parcel and footprint data to esitmate the square footage for each structure.
+SWEEP is designed to perform emissions estimation using user-specified selections for spatial extent and emissions factors. It accesses a hosted database of structures impacted by wildfire in California from 2018 to the present that includes damage inspection and structure information, including square footage.
+
+
+Using the estimator, users can pull emissions estimation from the database using three query methods:   
+
+- **Interactive** – walks users through building a query step-by-step.
+- **Spatial** – users provide a polygon geometry shapefile or geopackage and (optional) a date range.
+- **Automated** – users provide a filter field, filter value, and (optional) date range.
+ 
+
+In addition to a query type, users can use defaults or specify estimation parameters to use for emissions estimation.
+
+
+Here we demonstrate a spatial query and an automated query (the input method for the interactive filter won't work in this file).
+I highly recommend the interactive filter as a way to explore the data and understand the available filtering options.
 
 ## Spatial Emissions Estimation Query 
 
-Read in an AOI (optional: take a look!)
+### Read in or point to an AOI
+
+- For the spatial filter, users can provide a path to a shapefile (.shp) or geopackage, or use a geodataframe object.
+- It can have one or multiple polygons. In the tool output, columns from the polygon_input are retained and tagged with "AOI" at the start of the column.
+
 ```{python}
+# Here we read in a file so we can take a look first-- however, aoi_path could also be used as the input for "polygon_input".
+# Mosquito (2022) and River (2021) fires.
 aoi_path = os.path.join(config.demo_dir, "demo_multipoly.shp")
 aoi = gpd.read_file(aoi_path)
 aoi.plot()
 ```
 
-The Estimator uses data from CAL FIRE's damage inspection database to identify structures damaged by wildfire.
-It uses parcel and footprint data to esitmate the square footage for each structure.
+
+### Run sweep_estimator
+
+Here we run the main function, **sweep_estimator**.
+
+- We use the **get_mode** "use_default", but as stated in the readme users who need to download or refresh the database should use get_mode = "refresh". **NOTE:** using "refresh" to pull from the burned structure database requires access to a CARB ArcGIS online organizational login.
+- **polygon_input** can either be a gdf (as in this case) or a path.
+- We can include 'AOI_INDEX' in **aggregation_fields** for a summarized output file to ensure we get a summary per polygon in our aoi dataset.
+- Note the three outputs: **emissions_gdf** (a geodataframe of each structure and its emissions), **agg_table** (a summary dataframe), and **vehicle_table**.
 
 ```{python}
 emissions_gdf, agg_table, vehicle_table = sweep_estimator(
@@ -42,25 +72,38 @@ emissions_gdf, agg_table, vehicle_table = sweep_estimator(
     polygon_input = aoi,
     aggregate_fields=['AIR DISTRICT', 'AOI_INDEX']
     )
+
 print("Complete!")
 ```
 
+### Outputs
+
 In the returned dataframes, columns from the aoi_source are retained and tagged with "AOI" at the start of the column.
+
+#### **Emissions Report**
 emissions_gdf is a geodataframe of each structure and their estimated emissions, along with parameters used in the 
-estimation processl
+estimation process.
 
 ```{python}
 print(emissions_gdf.crs)
 emissions_gdf.head(5)
 ```
+   
+
 
 As a geodataframe, the output is easily visualized using the geopandas and matplotlib libraries.
 ```{python}
-
+# Read the AOI in to use as a base layer
 aoi = gpd.read_file(aoi_path)
+
+# Project to match emissions gdf
 aoi_gdf = aoi.to_crs(emissions_gdf.crs)
+
 fig, ax = plt.subplots(figsize=(6, 8))
+
 aoi_gdf.plot(ax=ax, color='none', edgecolor='lightgray', linewidth=1)
+
+# Scale the dots based off of emissions of CO.
 sizes = emissions_gdf["E_CO_TN"].fillna(0) * 5
 emissions_gdf.plot(
     ax=ax,
@@ -71,6 +114,7 @@ emissions_gdf.plot(
 ax.set_title("Emissions Map (CO in Tons)", fontsize=14)
 ```
 
+#### **Aggregated Table**
 In this demo run, we provided "AIR DISTRICT" and "AOI_INDEX" as the aggregation fields.
 As you can see our results are split by AOI_INDEX (the polygon) and AIR_DISTRICT.
 We get total emissions for each polygon in each air district.
@@ -78,9 +122,11 @@ We get total emissions for each polygon in each air district.
 ```{python}
 agg_table.head()
 ```
+    
 
 We can use the full dataframe to add other AOI attributes back in:
 ```{python}
+# Get the full list of AOI_ columns from the emissions_gdf dataframe
 aoi_cols = [col for col in emissions_gdf.columns if col.startswith("AOI_")]
 
 # Drop duplicates to get unique AOI records
@@ -91,11 +137,22 @@ agg_table_aoi = agg_table.merge(unique_aoi, on="AOI_INDEX", how="left")
 agg_table_aoi.head()
 ```
 
+#### **Vehicle Table**
+
+A very rough estimation of emissions from vehicles (currently there is no statewide open-source real-time report of vehicles destroyed by wildfire). The default method is to estimate the count of vehicles as 1.44 vehicle destroyed per structure destroyed (consumption >50%), a method obtained from Holder et al. 2023. Users can specify what emissions factors and pollutants to use in the **vef_choice** and **vpollutants** arguments in sweep_estimator.
+
+```{python}
+vehicle_table
+```
 
 ## Automated Emissions Estimation Query 
 
-In an "automated" query, we can set filter_field, filter_values, and, optionally, date ranges
-without working through the interactive tool.
+- In an "automated" query, we can set **filter_field**, **filter_values**, and, optionally, date ranges (**apply_date_filter, start_date,** and **end_date**).
+- This allows users to run a query without working through the interactive tool.
+- If you're savvy you can loop over date ranges or other filter_fields/filter_values to get a series of reports.
+- If running in an IDE, hovering over any function should provide typing hints and parameter information.
+
+### Run sweep_estimator with pre-set filter fields
 ```{python}
 emissions_gdf_auto, agg_table_auto, vehicle_table_auto = sweep_estimator(
     get_mode = "use_default",
@@ -106,18 +163,62 @@ emissions_gdf_auto, agg_table_auto, vehicle_table_auto = sweep_estimator(
     start_date = "2018-01-01",
     end_date = "2021-01-01",
     aggregate_fields=['AIR DISTRICT', 'YEAR', 'INCIDENT'],
+    # Adding a few more arguments-- here we specify the emissions factor source (HOLDER)
+    ef_choice = "HOLDER",
+    # And here we override the default to say we want ALL the pollutants available for the emissions factor source.
+    pollutants = "All",
     write = "No"
     )
+
 print("Complete!")
 emissions_gdf_auto.head()
 ```
 
+
+#### **TIP for filtering**
+Since it is difficult to document every possible choice for each field value for each potential filter field (choices: ["Wildfire Name", "Incident Number", "County", "Air Basin", "Air District", "CoAbDis Code"]), you can pull possible values from the current BSDB database.
+```{python}
+# We read in one of the classes from the package.
+from sweep.get_bsdb import GetBSDB
+
+# bsdb_df is the geodataframe of the BSDB.
+bsdb_df = GetBSDB("use_default").bsdb_df
+```
+```{python}
+# Air basins in the dataset:
+print(f"Air Basins: {bsdb_df['BASIN_NAME'].unique()}")
+
+# Air districts in the dataset:
+print(f"Air Districts: {bsdb_df['DIS_NAME'].unique()}")
+
+# All filter field column names: ["incidentname", "incidentnum", "CO_NAME", "BASIN_NAME", "DIS_NAME", "COABDIS"]
+# Note the argument filter_field uses the cleaned-up names: ["Wildfire Name", "Incident Number", "County", "Air Basin", "Air District", "CoAbDis Code"]
+
+# Date field: ["clean_date"]
+```
+
+**NOTE:** 
+
+- All filter field column names: ["incidentname", "incidentnum", "CO_NAME", "BASIN_NAME", "DIS_NAME", "COABDIS"]
+- The argument **filter_field** uses the cleaned-up names: ["Wildfire Name", "Incident Number", "County", "Air Basin", "Air District", "CoAbDis Code"]    
+
+
+Have fun!
+
+### Outputs
+
+The outputs are the same as for the interactive and spatial query types.
 As specified in "aggregate_fields", the aggregate table is summarized by year, air district, and fire incident.
+
 ```{python}
 agg_table_auto
 ```
 
 # Emissions Predictor
+
+**NOTE**: A Lightbox Parcel API key is REQUIRED to use the emissions predictor.
+
+The predictor uses parcel square footage data (where available) to estimate potential emissions within a user-provided polygon or set of polygons. The analysis is limited to parcels where square footage data is available. Users provide a percentage of structures within the polygon to assume “destroyed” by wildfire. As with the estimator, users provide emissions estimation parameters (or use the default), and the tool returns points and excel files with the requested estimates.
 
 ```{python}
 from sweep.predictor_main import sweep_predictor
@@ -125,21 +226,25 @@ from dotenv import load_dotenv
 load_dotenv() 
 ```
 
+### Read in or point to an AOI
+
 The AOI is the polygon shape or shapes in which emissions will be estimated. 
-In the Predictor function, this is aoi_source, and it can be either a geopandas geodataframe,
+In the Predictor function, this is **aoi_source**, and like polygon_input in sweep_estimator, it can be either a geopandas geodataframe,
 or a path to a geopackage or shapefile.
 
-The aoi_source will have each row or feature indexed seperately, with all columns retained in the final products.
+The aoi_source will be reprojected if needed and have each row or feature indexed seperately, with all columns retained in the final products.
 ```{python}
 # Recycling! We'll use the same aoi as the spatial query above.
-
 aoi.plot()
 ```
 
+### Run sweep_predictor
+
 Key differences related to the predictor are:
-- aoi_source: a geodataframe or shapeflie/geopackage path is required.
-- api_key: the need for a LightBox API key
-- ratio_destroyed: users must specify the ratio of structures to designate "destroyed" by fire.
+
+- **aoi_source**: a geodataframe or shapeflie/geopackage path is required.
+- **api_key**: the need for a LightBox API key
+- **ratio_destroyed**: users must specify the ratio of structures to designate "destroyed" by fire.
 
 ```{python}
 predicted_emissions_gdf, agg_table, vehicle_table = sweep_predictor(
@@ -152,28 +257,14 @@ predicted_emissions_gdf, agg_table, vehicle_table = sweep_predictor(
     write = "No")
 ```
 
+### Outputs
 
-In the returned dataframes, columns from the aoi_source are retained and tagged with "AOI" at the start of the column.
-predicted_emissions_gdf is a geodataframe of each record used to estimate emissions.
-Each "structure" is derived from the parcels that fell within the AOI.
+- In the returned dataframes, columns from the **aoi_source** are retained and tagged with "AOI" at the start of the column.
+- **predicted_emissions_gdf** is a geodataframe of each record used to estimate emissions.
+- Each "structure" is derived from the parcels that fell within the AOI.
 ```{python}
 print(predicted_emissions_gdf.crs)
 predicted_emissions_gdf.head()
-```
-
-```{python}
-# Read AOI layer
-aoi_gdf = aoi.to_crs(predicted_emissions_gdf.crs)
-fig, ax = plt.subplots(figsize=(6, 8))
-aoi_gdf.plot(ax=ax, color='none', edgecolor='lightgray', linewidth=1)
-sizes = predicted_emissions_gdf["E_CO_TN"].fillna(0) * 5
-predicted_emissions_gdf.plot(
-    ax=ax,
-    color='orange',
-    alpha=0.6,
-    markersize=sizes
-)
-ax.set_title("Emissions Map (CO in Tons)", fontsize=14)
 ```
 
 
@@ -191,4 +282,28 @@ aoi_cols = [col for col in predicted_emissions_gdf.columns if col.startswith("AO
 unique_aoi = predicted_emissions_gdf[aoi_cols].drop_duplicates()
 agg_table_aoi = agg_table.merge(unique_aoi, on="AOI_INDEX", how="left")
 agg_table_aoi
+```
+    
+
+We can also remake our map with the predictor's output instead of reported estimator data.
+
+- The predictor has a few main drawbacks.
+- First, it likely underestimates the count of structures, as parcel data generally reflects the main structure in a parcel. The full DINS dataset also includes minor utility structures, mobile homes, and other types of structures.
+- Second, not all structures in a fire footprint are destroyed. The predictor's **ratio_destroyed** provides users the ability to state the percentage of structures in the AOI destroyed, but it is effectively a placeholder for the data collected on the ground for the DINS dataset.
+
+#### Map
+
+```{python}
+# Read AOI layer
+aoi_gdf = aoi.to_crs(predicted_emissions_gdf.crs)
+fig, ax = plt.subplots(figsize=(6, 8))
+aoi_gdf.plot(ax=ax, color='none', edgecolor='lightgray', linewidth=1)
+sizes = predicted_emissions_gdf["E_CO_TN"].fillna(0) * 5
+predicted_emissions_gdf.plot(
+    ax=ax,
+    color='orange',
+    alpha=0.6,
+    markersize=sizes
+)
+ax.set_title("Emissions Map (CO in Tons)", fontsize=14)
 ```

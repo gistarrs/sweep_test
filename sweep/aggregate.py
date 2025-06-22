@@ -67,8 +67,7 @@ def aggregated_report(
         "AIR BASIN": ['AIR_BASIN', 2],
         "AOI_INDEX": ['AOI_INDEX', 8]
     }
-    print(f"Aggregating on: {aggregates}")
-
+    
     # Check if aggregate is None or an empty string
     if not aggregates:
         aggregates = ['YEAR', 'INCIDENT']

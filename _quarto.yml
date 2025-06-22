@@ -3,11 +3,11 @@ project:
   output-dir: docs
 
 website:
-  title: "SWEEP Estimator Demo"
+  title: "Structure Wildfire Emissions Estimator and Predictor"
   navbar:
     right:
       - text: "Demo"
-        href: SWEEP_estimator_vignette.html
+        href: SWEEP_vignette.html
 
 format:
   html:

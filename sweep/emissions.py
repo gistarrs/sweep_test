@@ -94,7 +94,6 @@ def estimate_emissions(
     >>> estimate_emissions(filt_bsdb, ef_choice = "OTHER", pollutants = "ALL", user_efs = r"C:/data/efs/custom_emissions_factors.xlsx")
     
     """
-    print(ef_folder)
     # Add consumption factor
     # Lit from Gollner/Goldstein suggests if a structure is categorized as "Major Damage" or "Destroyed", it is almost entirely consumed.
         # High-- 95% for all structures over "minor" (eg major or destroyed)

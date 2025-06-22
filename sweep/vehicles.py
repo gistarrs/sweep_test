@@ -70,10 +70,9 @@ def vehicle_calculator(
         print("Count provided:", n_vehicles, "vehicles.")
     elif count_or_ratio == "RATIO":
         n_destroyed = len(structure_df[structure_df['CONSUMPTION_FACTOR'] > 0.5])
-        print(n_destroyed)
         structure_to_vehicle_n = pd.to_numeric(cr_value, errors='coerce')
         n_vehicles = n_destroyed*structure_to_vehicle_n
-        print("Ratio provided:", n_vehicles, "vehicles estimated using ratio:", cr_value)
+        print("Ratio provided:", round(n_vehicles, 2), "vehicles estimated using ratio:", cr_value)
 
     ef_choice = vef_choice.upper()
     if "HOLDER" in ef_choice:

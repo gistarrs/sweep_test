@@ -29,10 +29,11 @@ def write_outputs(emissions_gdf, out_folder = config.out_dir, suffix = None, agg
     
     out_folder = os.path.join(out_folder, f"SWEEP_{suffix}")
     os.makedirs(out_folder, exist_ok=True)
+    print(f"Reports written to folder: {out_folder}")
 
     # 1. Always write emissions report
     er_out = os.path.join(out_folder, "Emissions_Report.xlsx")
-    print(f"Writing Emissions Report to {er_out}")
+    #print(f"Writing Emissions Report to {er_out}")
     emissions_excel = emissions_gdf.copy()
     emissions_excel['geometry_wkt'] = emissions_excel.geometry.astype(str)
     emissions_excel.to_excel(er_out, index=False)
@@ -40,14 +41,16 @@ def write_outputs(emissions_gdf, out_folder = config.out_dir, suffix = None, agg
     # 2. Conditionally write aggregated report
     if aggregated_report is not None:
         ar_out = os.path.join(out_folder, "Aggregated_Report.xlsx")
-        print(f"Writing Aggregated Report to {ar_out}")
+        #print(f"Writing Aggregated Report to {ar_out}")
         aggregated_report.to_excel(ar_out, index=False)
 
     # 3. Conditionally write vehicle report
     if vehicle_report is not None:
         vr_out = os.path.join(out_folder, "Vehicle_Report.xlsx")
-        print(f"Writing Vehicle Report to {vr_out}")
+        #print(f"Writing Vehicle Report to {vr_out}")
         vehicle_report.to_excel(vr_out, index=False)
+        
+    print("Tabular reports written.")
 
     # 4. Spatial output
     if spatial:

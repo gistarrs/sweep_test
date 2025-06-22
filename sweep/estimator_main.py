@@ -21,7 +21,7 @@ def sweep_estimator(
     write: Literal["YES", "NO"] = "YES",
     custom_filename: Optional[str] = None,
     filter_method: Literal["Interactive", "Automated", "Spatial"] = "Interactive",
-    filter_field: Optional[config.FilterField] = "Wildfire Name",
+    filter_field: Literal["Wildfire Name", "Incident Number", "County", "Air Basin", "Air District", "CoAbDis Code"] = "Wildfire Name",
     field_values: Optional[List[Union[str, int]]] = None,
     apply_date_filter: bool = False,
     start_date: Optional[Union[str, datetime]] = None,
@@ -30,12 +30,12 @@ def sweep_estimator(
     geometry_col: str = "geometry",
     ef_choice: Literal["HOLDER", "CARB", "OTHER"] = "HOLDER",
     user_efs: Optional[str] = None,
+    pollutants: Optional[Union[Literal["ALL"], str, List[str]]] = None,
     frame_factor: Optional[Union[Literal["HOLDER", "CARB"], float]] = "HOLDER",
     contents_factor: Optional[Union[Literal["HOLDER", "CARB"], float]] = "HOLDER",
     structure_consumption: Optional[Literal["HOLDER", "CARB", "DINS3", "DINS5"]] = "DINS3",
-    vehicle_ef_choice: Literal["HOLDER", "CARB", "OTHER"] = "CARB",
+    vehicle_ef_choice: Literal["HOLDER", "CARB", "OTHER"] = "HOLDER",
     user_vefs: Optional[str] = None,
-    pollutants: Optional[Union[Literal["ALL"], str, List[str]]] = None,
     vehicle_count_or_ratio: Literal["RATIO", "COUNT"] = "RATIO",
     vehicle_cr_value: float = 1.44,
     vpollutants: Optional[Union[Literal["ALL"], str, List[str]]] = None,
@@ -68,7 +68,7 @@ def sweep_estimator(
         - 'Automated': filters by supplied values in `filter_field` and `field_values`.
         - 'Spatial': uses geometry from `polygon_input`.
 
-    filter_field : str, optional
+    filter_field :  {"Wildfire Name", "Incident Number", "County", "Air Basin", "Air District", "CoAbDis Code"}, default = 'Wildfire Name'
         The field to filter on (e.g., "Wildfire Name", "Incident", "County"). Required for non-spatial filters.
 
     field_values : list of str or int, optional
@@ -104,11 +104,11 @@ def sweep_estimator(
     user_efs : str, optional
         Path to a custom CSV file defining emission factors.
 
-    vehicle_ef_choice : {'HOLDER', 'CARB', 'OTHER'}, default='CARB'
-        Emission factor source for calculating vehicle equivalents.
-
     pollutants : list of str or str or 'ALL', optional
         List of pollutants to estimate (e.g., ['CO', 'PM']). If None, uses default list.
+
+    vehicle_ef_choice : {'HOLDER', 'CARB', 'OTHER'}, default='HOLDER'
+        Emission factor source for calculating vehicle equivalents.
 
     vehicle_count_or_ratio : {'RATIO', 'COUNT'}, default='RATIO'
         Whether to return vehicle equivalents as a count or ratio of emissions.
