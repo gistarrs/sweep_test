@@ -16,7 +16,7 @@ print("Imports complete!")
 # Demo 1: 
 # Interactive query AND database download.
 # Zogg: 2020
-emissions_gdf, agg_table, vehicle_table = sweep_estimator(
+zogg_gdf, zogg_agg_table, zogg_vehicle_table = sweep_estimator(
     #get_mode ="refresh",
     get_mode ="use_default",
     filter_method = "Interactive",
@@ -24,14 +24,14 @@ emissions_gdf, agg_table, vehicle_table = sweep_estimator(
     )
 
 # View outputs
-emissions_gdf.head()
-agg_table
-vehicle_table
+zogg_gdf.head()
+zogg_agg_table
+zogg_vehicle_table
 
 # Visualize using .explore()
-emissions_gdf1 = emissions_gdf[emissions_gdf['STRUCTURECATEGORY'] != "Other Minor Structure"]
-emissions_gdf1 = emissions_gdf1[emissions_gdf1['CONSUMPTION_FACTOR'] > 0]
-emissions_gdf1.explore(
+zogg_gdf1 = zogg_gdf[emissions_gdf['STRUCTURECATEGORY'] != "Other Minor Structure"]
+zogg_gdf1 = zogg_gdf1[emissions_gdf1['CONSUMPTION_FACTOR'] > 0]
+zogg_gdf1.explore(
     column="E_PM_TN",
     cmap="YlOrRd",
     legend=True,
