@@ -1,11 +1,13 @@
 # SWEEP: Structure Wildfire Emissions Estimator and Predictor
 
 ## Description
-SWEEP is designed to estimate emissions from structures damaged or destoryed by wildfire in California.
+SWEEP generates inventories of emissions associated with wildland fires when they consume structures across California.
 SWEEP applies filters based on specific criteria (such as date ranges and geographic areas), estimates emissions, and generates aggregated reports on the results. The project utilizes a series of Python scripts, each of which handles a different part of the pipeline (e.g., data retrieval, emissions estimation, aggregation, etc.).
 
+More in-depth information on the objectives and background of SWEEP can be found in the [SWEEP User Guide](https://docs.google.com/document/d/1zsJ2Z7y5ElR1fBuoc3hRmBSDI5QYWiySNaw6wiD0XME/edit?tab=t.0) sections III Background and Methodology, IV References, and V Appendix.
+
 ## Table of Contents
-- [Demo Page](https://gistarrs.github.io/sweep_test/)
+- [SWEEEP Demonstration Page](https://gistarrs.github.io/sweep_test/)
 - [Installation](#installation)
 - [Requirements](#requirements)
 - [Running the Estimator](#running-the-estimator)
@@ -79,7 +81,7 @@ Users can rely on built-in defaults for emission factors (EFs), frame/contents f
 ### Importing the estimator
 
 ```bash
-from SWEEP_estimator import main
+from sweep.estimator_main import sweep_estimator
 ```
 
 ### General Parameters
@@ -160,7 +162,7 @@ Key Parameters:
 ["YEAR", "MONTH", "INCIDENT", "COABDIS", "COUNTY", "AIR DISTRICT", "AIR DISTRICT ID", "AIR BASIN"]. Defaults to ['YEAR', 'INCIDENT'].
 
 ```bash
-emissions_gdf, agg_table, vehicle_table = main(
+emissions_gdf, agg_table, vehicle_table = sweep_estimator(
     get_mode="refresh",
     filter_method="Interactive",
     aggregate_fields=["AIR DISTRICT"],
@@ -182,7 +184,7 @@ Key Parameters:
 ["YEAR", "MONTH", "INCIDENT", "COABDIS", "COUNTY", "AIR DISTRICT", "AIR DISTRICT ID", "AIR BASIN", "AOI_INDEX"]. Defaults to ['YEAR', 'INCIDENT']
   
 ```bash
-emissions_gdf, agg_table, vehicle_table = main(
+emissions_gdf, agg_table, vehicle_table = sweep_estimator(
     get_mode="use_default",
     filter_method="Spatial",
     polygon_input = os.path.join(config.demo_dir, "demo_multipoly.shp")
@@ -204,7 +206,7 @@ Key Parameters:
 ["YEAR", "MONTH", "INCIDENT", "COABDIS", "COUNTY", "AIR DISTRICT", "AIR DISTRICT ID", "AIR BASIN"]. Defaults to ['YEAR', 'INCIDENT']
 
 ```bash
-emissions_gdf, agg_table, vehicle_table = main(
+emissions_gdf, agg_table, vehicle_table = sweep_estimator(
     get_mode = "use_default",
     filter_method = "automated",
     filter_field = "Air Basin",
@@ -227,7 +229,7 @@ This tool rougly predicts fire emissions from structures using parcel structure 
 ### Importing the predictor
 
 ```bash
-from SWEEP_predictor import main
+from sweep.predictor_main import sweep_predictor
 ```
 ### General Parameters
 The general parameters (aside from get_mode) are the same as those for SWEEP_estimator.
@@ -240,7 +242,7 @@ The general parameters (aside from get_mode) are the same as those for SWEEP_est
 ["YEAR", "MONTH", "INCIDENT", "COABDIS", "COUNTY", "AIR DISTRICT", "AIR DISTRICT ID", "AIR BASIN", "AOI_INDEX"]. Defaults to ['YEAR', 'INCIDENT']
 
 ```bash
-predicted_emissions_gdf, agg_table, vehicle_table = main(
+predicted_emissions_gdf, agg_table, vehicle_table = sweep_predictor(
     aoi_source = os.path.join(config.demo_dir, "demo_multipoly.shp"),
     # You need a lightbox API key to get the parcel data.
     api_key = os.getenv('LB_API_KEY'),
@@ -265,31 +267,20 @@ predicted_emissions_gdf, agg_table, vehicle_table = main(
 
 ### Scripts Overview:
 
-- config.py
 
-    Contains configuration settings for the project, including any necessary API keys, file paths, or environment-specific settings.
-- get_bsdb.py
+| Script               | Description |
+|----------------------|-------------|
+| `config.py`          | Stores configuration settings such as file paths, API urls, and some default parameter settings. |
+| `estimator_main.py`  | Runs the complete SWEEP Estimator workflow.|
+| `predictor_main.py`  | Runs the complete SWEEP Predictor workflow.|
+| `get_bsdb.py`        | Retrieves Base Spatial Data (BSDB) from API or saved GeoJSON and loads it into a DataFrame. |
+| `filters.py`         | Applies filtering logic (interactive, automated, spatial) to BSDB data. |
+| `predictor_parcels.py`| Extracts and processes parcel data from LightBox within a user-defined AOI for the predictor workflow.|
+| `emissions.py`       | Estimates emissions using user-selected emission factors. |
+| `aggregate.py`       | Aggregates emissions data by category (e.g., county, year). |
+| `vehicles.py`        | Calculates vehicle-related emissions. |
+| `write_outputs.py`   | Writes spatial and non-spatial outputs (e.g., GeoPackage, CSV) to disk. |
 
-    Handles the retrieval of BSDB (Base Spatial Data) from the API, loading it into a DataFrame for further processing.
-
-- aoi_handler.py
-
-    Provides classes and methods to extract and process parcel data  intersecting a user-defined Area of Interest (AOI). Generates a synthetic BSDB used by the predictor.
-- filters.py
-
-    Applies various filters to the BSDB data, such as date range filtering, geographic filtering (e.g., by county), and other conditions.
-- emissions.py
-
-    Estimates emissions based on the filtered BSDB data using emission factors (EF) for various pollutants. The emission factors are selected based on the user's choice.
-- aggregate.py
-
-    Aggregates the emissions data according to specified columns (e.g., by county, district, or year), and generates a summarized report.
-- vehicles.py
-
-    Calculates vehicle-related emissions, using emission factors and ratios specific to vehicle types.
-- write_outputs.py
-
-    Handles the writing of outputs to disk, such as GeoPackages, CSV files, or other formats. The results include both spatial and non-spatial outputs.
 
 ## Sources
 
