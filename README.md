@@ -6,8 +6,9 @@ SWEEP applies filters based on specific criteria (such as date ranges and geogra
 
 More in-depth information on the objectives and background of SWEEP can be found in the [SWEEP User Guide](https://docs.google.com/document/d/1zsJ2Z7y5ElR1fBuoc3hRmBSDI5QYWiySNaw6wiD0XME/edit?tab=t.0) sections III Background and Methodology, IV References, and V Appendix.
 
+### For a quick look at some SWEEP runs, take a look at the [SWEEP Demonstration Page](https://gistarrs.github.io/sweep_test/).
+
 ## Table of Contents
-- [SWEEEP Demonstration Page](https://gistarrs.github.io/sweep_test/)
 - [Installation](#installation)
 - [Requirements](#requirements)
 - [Running the Estimator](#running-the-estimator)
