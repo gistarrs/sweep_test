@@ -96,11 +96,12 @@ emissions_gdf1.explore(
 
 # File format:
 # It expects a .xlsx file.
-# For structures, it requires Pollutant and Structure_gkg (emissions in grams per kg material consumed) columns:
+# For structures, it requires Pollutant and Structure_gkg (emissions in grams per kg material consumed) columns.
+# If also using for vehicles, it also requires a Vehicle_gkg column.
 holder_efs = pd.read_excel(os.path.join(config.ef_folder, "Holder_EFs.xlsx"))
 holder_efs.head()
 
-# Here are my test_efs, a weird subset:
+# Here is an example file of custom emissions factors (Test_EFs):
 test_efs = pd.read_excel(os.path.join(config.ef_folder, "Test_EFs.xlsx"))
 test_efs
 
@@ -109,10 +110,11 @@ emissions_gdf, agg_table, vehicle_table = sweep_estimator(
     get_mode ="use_default",
     filter_method = "Interactive",
     ef_choice= "OTHER", # Signifies we don't want to use a preset file.
-    user_efs = r"C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors\Test_EFs.xlsx",
+    # Path to emissions factor excel file.
+    user_efs = os.path.join(config.ef_folder, "Test_EFs.xlsx"),
     vehicle_ef_choice = "OTHER", # Signifies we don't want to use a preset file.
     # If a path is provided, it will default to using all emissions factors in the excel file.
-    user_vefs = r"C:\Users\gstarrs\Projects\CARB\sweep_test\data\emissions_factors\Test_EFs.xlsx",
+    user_vefs = os.path.join(config.ef_folder, "Test_EFs.xlsx"),
     aggregate_fields=['AIR DISTRICT', 'INCIDENT']
     )
 
