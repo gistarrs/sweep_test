@@ -1,3 +1,14 @@
+"""
+Here we provide a few more in-depth examples of uses for the SWEEP scripted tool.
+- Demo 1 allows users to download a new BSDB and use the interactive query tool.
+- Demos 2 and 3 refer to the spatial and automated queries in the demo webpage.
+- Demo 4 refers to the predictor query in the demo webpage.
+- Demo 5 is an automated query using a user-specified subset of emissions factors 
+and custom values for frame and contents loads.
+- Demo 6 is an interactive query where the user specifies a 
+custom emissions factor excel file.
+"""
+
 import os
 import geopandas as gpd
 import pandas as pd
@@ -6,22 +17,27 @@ import matplotlib.cm as cm
 import matplotlib.colors as colors
 
 from sweep.estimator_main import sweep_estimator
-from sweep.predictor_main import sweep_predictor
 import sweep.config as config
-from dotenv import load_dotenv
-load_dotenv() 
 
 print("Imports complete!")
 
-# Demo 1: 
-# Interactive query AND database download.
+# Demo 1: Interactive query WITH new database download (refresh).
 # Zogg: 2020
+# Outputs are:
+# * gdf of structures
+# * aggregated table
+# * vehicle table
 zogg_gdf, zogg_agg_table, zogg_vehicle_table = sweep_estimator(
-    #get_mode ="refresh",
-    get_mode ="use_default",
+    # Refresh downloads new copy of bsdb, saves to bsdb_datasets/
+    get_mode ="refresh",
     filter_method = "Interactive",
     write = "Yes"
     )
+# For interactive mode, after data download follow prompts in the console.
+# To get Zogg, say "no" for date filter, "yes" for other filter
+# Select "Wildfire Name", then year: 2020
+# Find Zogg and select it by typing it's list number (43).
+# No other filters
 
 # View outputs
 zogg_gdf.head()
@@ -29,8 +45,8 @@ zogg_agg_table
 zogg_vehicle_table
 
 # Visualize using .explore()
-zogg_gdf1 = zogg_gdf[emissions_gdf['STRUCTURECATEGORY'] != "Other Minor Structure"]
-zogg_gdf1 = zogg_gdf1[emissions_gdf1['CONSUMPTION_FACTOR'] > 0]
+zogg_gdf1 = zogg_gdf[zogg_gdf['STRUCTURECATEGORY'] != "Other Minor Structure"]
+zogg_gdf1 = zogg_gdf1[zogg_gdf1['CONSUMPTION_FACTOR'] > 0]
 zogg_gdf1.explore(
     column="E_PM_TN",
     cmap="YlOrRd",
@@ -44,15 +60,18 @@ zogg_gdf1.explore(
 # Demo 5: Customizing Emissions Estimation Options
 emissions_gdf, agg_table, vehicle_table = sweep_estimator(
     get_mode ="use_default",
+    # Automated allows user to set filter values as arguments (filter_method, filter_field, data filter).
     filter_method = "Automated",
     filter_field = "Air Basin",
     field_values = ['MOUNTAIN COUNTIES', "SAN JOAQUIN VALLEY"], 
     apply_date_filter= True,
     start_date = "2021-01-01",
     end_date = "2024-01-01",
-    ef_choice = "HOLDER",
+    ef_choice = "HOLDER", # Emissions factor source for structures
+    # Pollutants can be None (uses config default), a list of pollutants from the ef source, or "All".
     pollutants = ["CO", "NOx"],
-    vehicle_ef_choice = "HOLDER",
+    vehicle_ef_choice = "HOLDER", # Emissions factor source for vehicles
+    # vpollutants (vehicle pollutants) can be None (uses config default), a list of pollutants from the ef source, or "All".
     vpollutants = ["CO", "NOx"],
     structure_consumption = "DINS5", # Choose from preset (HOLDER, CARB, DINS3, DINS5) or use a float
     frame_factor= 8, # Choose from preset (HOLDER, CARB) or use a float
@@ -98,23 +117,7 @@ emissions_gdf, agg_table, vehicle_table = sweep_estimator(
     )
 
 
+# Users can also view their local BSDB using the following:
+from sweep.get_bsdb import GetBSDB
+bsdb_df = GetBSDB("use_default").bsdb_df
 
-
-
-
-
-
-
-
-
-
-
-
-
-# from sweep.get_bsdb import GetBSDB
-# #bsdb_df = GetBSDB("refresh", org = "IGIS").bsdb_df
-# bsdb_df = GetBSDB("use_default").bsdb_df
-
-# bsdb_dupes = bsdb_df[bsdb_df['globalid'].duplicated(keep=False)]
-# bsdb_dup_uniques = bsdb_dupes['globalid'].nunique()
-# true_dupes = bsdb_dupes[bsdb_dupes.duplicated(keep=False)]
